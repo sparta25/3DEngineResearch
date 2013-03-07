@@ -11,7 +11,8 @@
     <RootNamespace>PlaneGenerator</RootNamespace>
     <AssemblyName>PlaneGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -44,9 +45,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\PlaneGeneratorConfigSection.cs" />
+    <Compile Include="Configuration\BoundaryBoxSizeProperty.cs" />
+    <Compile Include="Configuration\GridSizeProperty.cs" />
+    <Compile Include="Configuration\PlaneGeneratorConfiguration.cs" />
+    <Compile Include="Configuration\QuadrilateralSizeProperty.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConvexesHelper\ConvexesHelper.csproj">
+      <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
+      <Name>ConvexesHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -18,7 +18,7 @@ namespace ConvexHelper
             return list;
         }
 
-        public static Quadrilateral GenerateRandomQuadrilateral(BoundaryBox box, int minSize, int maxSize)
+        public static Quadrilateral GenerateRandomQuadrilateral(BoundaryBox box, float minSize, float maxSize)
         {
             var sceneSize = box;
             var minSetSize = new Point { X = minSize, Y = minSize, Z = minSize };

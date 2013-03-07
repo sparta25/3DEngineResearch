@@ -23,9 +23,9 @@ namespace ConvexHelper
 
         public int PartWidth { get; set; }
 
-        public int MinFractureSize{ get; set;}
+        public float MinFractureSize{ get; set;}
 
-        public int MaxFractureSize{ get; set;}
+        public float MaxFractureSize{ get; set;}
 
         public BoundaryBox BoundaryBox{ get; set;}
 
