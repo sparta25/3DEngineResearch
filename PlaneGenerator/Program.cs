@@ -31,8 +31,7 @@ namespace PlaneGenerator
             scene.FillIndices();
             scene.FillColors();
 
-            var serializer = new XmlSerializer(typeof(ConvexSettings));
-            serializer.Serialize(Console.Out, scene);
+            SerializationProvider.DumpToXml<ConvexSettings>(Console.Out, scene);
         }
     }
 }

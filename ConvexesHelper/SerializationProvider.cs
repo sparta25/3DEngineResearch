@@ -45,6 +45,12 @@ namespace ConvexHelper
             }
         }
 
+        public static void DumpToXml<T>(TextWriter writer, T @object)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            serializer.Serialize(writer, @object);
+        }
+
         public static T LoadFromXml<T>(string fullFilePath)
         {
             T t;
@@ -56,5 +62,11 @@ namespace ConvexHelper
             return t;
         }
 
+        public static T LoadFromXml<T>(TextReader reader)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            T @object = (T)serializer.Deserialize(reader);
+            return @object;
+        }
     }
 }

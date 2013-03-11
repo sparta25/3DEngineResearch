@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DEnginesTest", "3DEnginesT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneGenerator", "PlaneGenerator\PlaneGenerator.csproj", "{8D21F120-E17E-4924-941E-5F8A1FFF5801}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOivWinForms", "TestOivWinForms\TestOivWinForms.csproj", "{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,18 @@ Global
 		{8D21F120-E17E-4924-941E-5F8A1FFF5801}.Release|Mixed Platforms.Build.0 = Release|x86
 		{8D21F120-E17E-4924-941E-5F8A1FFF5801}.Release|x86.ActiveCfg = Release|x86
 		{8D21F120-E17E-4924-941E-5F8A1FFF5801}.Release|x86.Build.0 = Release|x86
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|x86.ActiveCfg = Debug|x86
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Debug|x86.Build.0 = Debug|x86
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|x86.ActiveCfg = Release|x86
+		{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
