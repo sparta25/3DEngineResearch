@@ -16,10 +16,8 @@ namespace ConvexHelper
 
         BoundaryBox BoundaryBox { get; set; }
 
-        List<Color> Colors { get; set; }
-
-        List<Point> Vertices { get; set; }
-
         List<int> Indices { get; set; }
+
+        List<Plane> Planes { get; set; }
     }
 }

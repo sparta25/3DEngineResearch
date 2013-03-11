@@ -11,8 +11,7 @@ namespace PlaneGenerator
     {
         static void Main(string[] args)
         {
-            PlaneGeneratorConfiguration configuration =
-                (PlaneGeneratorConfiguration)ConfigurationManager.GetSection("planeGenerator");
+            var configuration = (PlaneGeneratorConfiguration)ConfigurationManager.GetSection("planeGenerator");
 
             var scene = new ConvexSettings {
                 BoundaryBox = new BoundaryBox {
@@ -27,11 +26,10 @@ namespace PlaneGenerator
                 PartWidth = configuration.GridSize.Height
             };
 
-            scene.FillVertices();
+            scene.FillPlanes();
             scene.FillIndices();
-            scene.FillColors();
-
-            SerializationProvider.DumpToXml<ConvexSettings>(Console.Out, scene);
+            
+            SerializationProvider.DumpToXml(Console.Out, scene);
         }
     }
 }

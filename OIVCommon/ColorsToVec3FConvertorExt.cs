@@ -1,5 +1,4 @@
-﻿//dummy comment
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ConvexHelper;
 using OIV.Inventor;

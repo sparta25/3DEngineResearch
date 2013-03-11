@@ -28,11 +28,9 @@ namespace ConvexHelper
         public float MaxFractureSize{ get; set;}
 
         public BoundaryBox BoundaryBox{ get; set;}
-
-        public List<Color> Colors{ get; set;}
-
-        public List<Point> Vertices { get; set; }
-
+        
         public List<int> Indices { get; set; }
+        
+        public List<Plane> Planes { get; set; }
     }
 }

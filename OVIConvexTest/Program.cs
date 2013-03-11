@@ -40,10 +40,9 @@ namespace OVIConvexTest
                         }
                 };
 
-            settings.FillColors();
+            settings.FillPlanes();
             settings.FillIndices();
-            settings.FillVertices();
-
+            
             SerializationProvider.DumpToXml(SettingsFile, settings);
         }
     }

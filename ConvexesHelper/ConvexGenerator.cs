@@ -180,7 +180,6 @@ namespace ConvexHelper
         public static List<Color> GetFaceColors(int width, int height, bool doubleSides = true)
         {
             var sides = doubleSides ? 2 : 1;
-            var random = new Random();
             var colors = new List<Color>();
             int itemCount = sides * width * height;
 

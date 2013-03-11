@@ -50,30 +50,31 @@ namespace TestOivWinForms
             shapeHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
             _root.AddChild(shapeHints);
 
-            var countOfVertices = (_scene.PartWidth + 1) * (_scene.PartHeight + 1);
-            
-            SbVec3f[] vertices = _scene.Vertices.ToArrayOfVec3F();
-            
-            SbVec3f[] colors = _scene.Colors.ToArrayOfVec3F();
+            //var countOfVertices = (_scene.PartWidth + 1) * (_scene.PartHeight + 1);
+            //SbVec3f[] vertices = _scene.Vertices.ToArrayOfVec3F();
+            //SbVec3f[] colors = _scene.Colors.ToArrayOfVec3F();
             
             int[] grid = _scene.Indices.ToArray();
 
-            for (int i = 0; i < _scene.NumberOfPlanes; i++)
+            //for (int i = 0; i < _scene.NumberOfPlanes; i++)
+            foreach (var plane in _scene.Planes)
             {
-                var ver = new SbVec3f[countOfVertices];
-                Array.Copy(vertices, i * countOfVertices, ver, 0, ver.Length);
+                //var ver = new SbVec3f[countOfVertices];
+                //Array.Copy(vertices, i * countOfVertices, ver, 0, ver.Length);
 
                 // Using the new SoVertexProperty node is more efficient
                 var myVertexProperty = new SoVertexProperty();
 
+                var colors = plane.Colors.ToArrayOfVec3F();
                 // Define colors for the faces
                 for (int k = 0; k < colors.Length; k++)
                     myVertexProperty.orderedRGBA[k] = new SbColor(colors[k]).GetPackedValue();
+                
 
                 myVertexProperty.materialBinding.Value = SoVertexProperty.Bindings.PER_FACE;
 
                 // Define coordinates for vertices
-                myVertexProperty.vertex.SetValues(0, ver);
+                myVertexProperty.vertex.SetValues(0, plane.Vertices.ToArrayOfVec3F());
 
                 // Define the IndexedFaceSet, with indices into
                 // the vertices:

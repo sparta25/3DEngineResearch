@@ -40,51 +40,47 @@ namespace OIVWpfTest
                     Width = 100
                 }
             };
-
-            settings.FillColors();
+            
+            settings.FillPlanes();
             settings.FillIndices();
-            settings.FillVertices();
 
             SerializationProvider.DumpToXml(SettingsFile, settings);
         }
 
         private SoSeparator CreateScene(IConvexSettings settings)
         {
-            SoSeparator _root = new SoSeparator();
+            var _root = new SoSeparator();
+            
+            //int[] grid = settings.Indices.ToArray();
+            
 
-            SbVec3f[] vertices = settings.Vertices.ToArrayOfVec3F();
-
-            //int[] grid = GetGridFaces(width, height);
-            int[] grid = settings.Indices.ToArray();
-
-            //SbVec3f[] colors = GetFaceColors(width, height);
-            SbVec3f[] colors = settings.Colors.ToArrayOfVec3F(); // GetFaceColors(width, height);
-
-            SoShapeHints myHints = new SoShapeHints();
-            myHints.vertexOrdering.Value = SoShapeHints.VertexOrderings.COUNTERCLOCKWISE;
-            myHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
-            _root.AddChild(myHints);
+            //SoShapeHints myHints = new SoShapeHints();
+            //myHints.vertexOrdering.Value = SoShapeHints.VertexOrderings.COUNTERCLOCKWISE;
+            //myHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
+            //_root.AddChild(myHints);
 
 
-            // Using the new SoVertexProperty node is more efficient
-            var myVertexProperty = new SoVertexProperty();
+            //// Using the new SoVertexProperty node is more efficient
+            //var myVertexProperty = new SoVertexProperty();
+            
+            //SbVec3f[] colors = settings.Planes.ToArrayOfVec3F();
+            
+            //// Define colors for the faces
+            //for (int i = 0; i < colors.Length; i++)
+            //    myVertexProperty.orderedRGBA[i] = new SbColor(colors[i]).GetPackedValue();
 
-            // Define colors for the faces
-            for (int i = 0; i < colors.Length; i++)
-                myVertexProperty.orderedRGBA[i] = new SbColor(colors[i]).GetPackedValue();
+            //myVertexProperty.materialBinding.Value = SoVertexProperty.Bindings.PER_FACE;
 
-            myVertexProperty.materialBinding.Value = SoVertexProperty.Bindings.PER_FACE;
+            //// Define coordinates for vertices
+            //myVertexProperty.vertex.SetValues(0, vertices);
 
-            // Define coordinates for vertices
-            myVertexProperty.vertex.SetValues(0, vertices);
+            //// Define the IndexedFaceSet, with indices into
+            //// the vertices:
+            //var myFaceSet = new SoIndexedFaceSet();
+            //myFaceSet.coordIndex.SetValues(0, grid);
 
-            // Define the IndexedFaceSet, with indices into
-            // the vertices:
-            var myFaceSet = new SoIndexedFaceSet();
-            myFaceSet.coordIndex.SetValues(0, grid);
-
-            myFaceSet.vertexProperty.Value = myVertexProperty;
-            _root.AddChild(myFaceSet);
+            //myFaceSet.vertexProperty.Value = myVertexProperty;
+            //_root.AddChild(myFaceSet);
             return _root;
         } 
         

@@ -65,8 +65,7 @@ namespace ConvexHelper
         public static T LoadFromXml<T>(TextReader reader)
         {
             var serializer = new XmlSerializer(typeof(T));
-            T @object = (T)serializer.Deserialize(reader);
-            return @object;
+            return (T)serializer.Deserialize(reader);
         }
     }
 }
