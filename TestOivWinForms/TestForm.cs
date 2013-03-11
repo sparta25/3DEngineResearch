@@ -14,6 +14,7 @@ using OIV.Inventor;
 using OIV.Inventor.Win;
 
 using ConvexHelper;
+using OIVCommon;
 
 namespace TestOivWinForms
 {
@@ -23,11 +24,6 @@ namespace TestOivWinForms
         private SoWinRenderArea _renderArea;
 
         SoPerspectiveCamera _camera;
-        float _phi = 0;
-        float _r = 4;
-        float _originX = 0;
-        float _originY = 0;
-        float _originZ = 0;
         SbVec3f _sceneCenter;
         float _radius;
         ConvexSettings _scene;
@@ -45,28 +41,28 @@ namespace TestOivWinForms
 
             _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length / 2,
                 _scene.BoundaryBox.Width /2 , _scene.BoundaryBox.Height / 2);
-            _sceneCenter = new SbVec3f(0, 0, 0);
+            //_sceneCenter = new SbVec3f(0, 0, 0);
 
             _radius = new [] { _scene.BoundaryBox.Length, _scene.BoundaryBox.Width, _scene.BoundaryBox.Height }.Max() * 2;
-            _radius = 3;
+            //_radius = 3;
 
             var shapeHints = new SoShapeHints();
             shapeHints.vertexOrdering.Value = SoShapeHints.VertexOrderings.COUNTERCLOCKWISE;
             shapeHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
             _root.AddChild(shapeHints);
 
-            var myMaterial = new SoMaterial();
-            myMaterial.diffuseColor.SetValue(0.5f, 0.5f, 0.5f);
-            _root.AddChild(myMaterial);
+            //var myMaterial = new SoMaterial();
+            //myMaterial.diffuseColor.SetValue(0.5f, 0.5f, 0.5f);
+            //_root.AddChild(myMaterial);
 
-            var transform = new SoTransform();
-            transform.rotation.Value = new SbRotation(new SbVec3f(1, 0, 0), (float)(Math.PI / 180) * 80f);
-            _root.AddChild(transform);
+            //var transform = new SoTransform();
+            //transform.rotation.Value = new SbRotation(new SbVec3f(1, 0, 0), (float)(Math.PI / 180) * 80f);
+            //_root.AddChild(transform);
 
-            var cone = new SoCone();
-            cone.height.Value = 0.5f;
-            cone.bottomRadius.Value = 0.2f;
-            _root.AddChild(cone);
+            //var cone = new SoCone();
+            //cone.height.Value = 0.5f;
+            //cone.bottomRadius.Value = 0.2f;
+            //_root.AddChild(cone);
 
             //for (int i = 0; i < 1; i++)
             //{
@@ -74,6 +70,40 @@ namespace TestOivWinForms
             //    SoIndexedFaceSet faceSet = FaceSetHelper.GetRandomFaceSetsAsOneObject(100);
             //    _root.AddChild(faceSet);
             //}
+
+            var countOfVertices = (_scene.PartWidth + 1) * (_scene.PartHeight + 1);
+            
+            SbVec3f[] vertices = _scene.Vertices.ToArrayOfVec3F();
+            
+            SbVec3f[] colors = _scene.Colors.ToArrayOfVec3F();
+            
+            int[] grid = _scene.Indices.ToArray();
+
+            for (int i = 0; i < _scene.NumberOfPlanes; i++)
+            {
+                var ver = new SbVec3f[countOfVertices];
+                Array.Copy(vertices, i * countOfVertices, ver, 0, ver.Length);
+
+                // Using the new SoVertexProperty node is more efficient
+                var myVertexProperty = new SoVertexProperty();
+
+                // Define colors for the faces
+                for (int k = 0; k < colors.Length; k++)
+                    myVertexProperty.orderedRGBA[k] = new SbColor(colors[k]).GetPackedValue();
+
+                myVertexProperty.materialBinding.Value = SoVertexProperty.Bindings.PER_FACE;
+
+                // Define coordinates for vertices
+                myVertexProperty.vertex.SetValues(0, ver);
+
+                // Define the IndexedFaceSet, with indices into
+                // the vertices:
+                var myFaceSet = new SoIndexedFaceSet();
+                myFaceSet.coordIndex.SetValues(0, grid);
+                myFaceSet.vertexProperty.Value = myVertexProperty;
+
+                _root.AddChild(myFaceSet);
+            }
         }
 
         void CreateLights()
