@@ -1,1 +1,1 @@
-..\PlaneGenerator\Bin\Debug\PlaneGenerator.exe | Bin\Debug\TestOivWinForms.exe
+..\PlaneGenerator\bin\Debug\PlaneGenerator.exe | bin\Debug\TestOivWinForms.exe

@@ -27,6 +27,7 @@ namespace TestOivWinForms
         SbVec3f _sceneCenter;
         float _radius;
         ConvexSettings _scene;
+        float _angle = 0;
 
         public TestForm()
         {
@@ -41,35 +42,13 @@ namespace TestOivWinForms
 
             _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length / 2,
                 _scene.BoundaryBox.Width /2 , _scene.BoundaryBox.Height / 2);
-            //_sceneCenter = new SbVec3f(0, 0, 0);
 
             _radius = new [] { _scene.BoundaryBox.Length, _scene.BoundaryBox.Width, _scene.BoundaryBox.Height }.Max() * 2;
-            //_radius = 3;
 
             var shapeHints = new SoShapeHints();
             shapeHints.vertexOrdering.Value = SoShapeHints.VertexOrderings.COUNTERCLOCKWISE;
             shapeHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
             _root.AddChild(shapeHints);
-
-            //var myMaterial = new SoMaterial();
-            //myMaterial.diffuseColor.SetValue(0.5f, 0.5f, 0.5f);
-            //_root.AddChild(myMaterial);
-
-            //var transform = new SoTransform();
-            //transform.rotation.Value = new SbRotation(new SbVec3f(1, 0, 0), (float)(Math.PI / 180) * 80f);
-            //_root.AddChild(transform);
-
-            //var cone = new SoCone();
-            //cone.height.Value = 0.5f;
-            //cone.bottomRadius.Value = 0.2f;
-            //_root.AddChild(cone);
-
-            //for (int i = 0; i < 1; i++)
-            //{
-            //    //ConvexHelper.ConvexGenerator
-            //    SoIndexedFaceSet faceSet = FaceSetHelper.GetRandomFaceSetsAsOneObject(100);
-            //    _root.AddChild(faceSet);
-            //}
 
             var countOfVertices = (_scene.PartWidth + 1) * (_scene.PartHeight + 1);
             
@@ -155,7 +134,6 @@ namespace TestOivWinForms
         private void _buttonRotate_Click(object sender, EventArgs e)
         {
             int count = 0;
-            float angle = 0;
             float step = 0.01f;
 
             Stopwatch sw = new Stopwatch();
@@ -163,12 +141,12 @@ namespace TestOivWinForms
 
             while (sw.ElapsedMilliseconds < 10000)
             {
-                _camera.position.Value = GetCameraPosition(angle);
+                _camera.position.Value = GetCameraPosition(_angle);
                 _camera.PointAt(_sceneCenter);
                 _renderArea.Render();
 
                 count++;
-                angle += step;
+                _angle += step;
             }
 
             sw.Stop();

@@ -5,8 +5,28 @@ namespace ConvexHelper
 {
     public class ConvexGenerator
     {
-        private static readonly Random Random = new Random();        
-        
+        private static readonly Random _random = new Random();
+
+        private static float GetRandomFloat()
+        {
+            return (float)_random.NextDouble();
+        }
+
+        private static float GetRandomFloat(float max)
+        {
+            return GetRandomFloat() * max;
+        }
+
+        private static float GetRandomFloat(float min, float max)
+        {
+            return GetRandomFloat(max - min) + min;
+        }
+
+        private static float GetRandomFloatInDoubleRange(float min, float max)
+        {
+            return (_random.Next(2) == 0 ? -1 : 1) * GetRandomFloat(min, max);
+        }
+
         public static IEnumerable<Quadrilateral> GenerateQuadrilaterals(IConvexSettings settings)
         {
             var list = new List<Quadrilateral>();
@@ -20,50 +40,54 @@ namespace ConvexHelper
 
         public static Quadrilateral GenerateRandomQuadrilateral(BoundaryBox box, float minSize, float maxSize)
         {
-            var sceneSize = box;
-            var minSetSize = new Point { X = minSize, Y = minSize, Z = minSize };
-            var setSize = new Point { X = maxSize, Y = maxSize, Z = maxSize }; 
-
-            var topLeft = new Point
-            {
-                X = (float)(sceneSize.Length * Random.NextDouble()),
-                Y = (float)(sceneSize.Width * Random.NextDouble()),
-                Z = (float)(sceneSize.Height * Random.NextDouble())
+            var sceneSize = new BoundaryBox {
+                Length = box.Length - 2 * maxSize,
+                Width = box.Width - 2 * maxSize,
+                Height = box.Height - 2 * maxSize
             };
 
-            var topRight = new Point
-            {
-                X = topLeft.X + BoundToAbsMin((float)(setSize.X * Random.NextDouble()), minSetSize.X),
-                Y = topLeft.Y + BoundToAbsMin((float)(setSize.Y * Random.NextDouble()), minSetSize.Y),
-                Z = topLeft.Z + BoundToAbsMin((float)(setSize.Z * Random.NextDouble()), minSetSize.Z)
+            var minSetSize = new Point { X = minSize, Y = minSize, Z = minSize };
+            var setSize = new Point { X = maxSize, Y = maxSize, Z = maxSize };
+
+            var topLeft = new Point {
+                X = maxSize + GetRandomFloat(sceneSize.Length),
+                Y = maxSize + GetRandomFloat(sceneSize.Width),
+                Z = maxSize + GetRandomFloat(sceneSize.Height)
+            };
+
+            var topRight = new Point {
+                X = topLeft.X + GetRandomFloatInDoubleRange(minSize, maxSize),
+                Y = topLeft.Y + GetRandomFloatInDoubleRange(minSize, maxSize),
+                Z = topLeft.Z + GetRandomFloatInDoubleRange(minSize, maxSize)
             };
             
-            var bottomLeft = new Point
-            {
-                X = topLeft.X + BoundToAbsMin((float)(setSize.X * Random.NextDouble()), minSetSize.X),
-                Y = topLeft.Y + BoundToAbsMin((float)(setSize.Y * Random.NextDouble()), minSetSize.Y),
-                Z = topLeft.Z + BoundToAbsMin((float)(setSize.Z * Random.NextDouble()), minSetSize.Z)
+            var bottomLeft = new Point {
+                X = topLeft.X + GetRandomFloatInDoubleRange(minSize, maxSize),
+                Y = topLeft.Y + GetRandomFloatInDoubleRange(minSize, maxSize),
+                Z = topLeft.Z + GetRandomFloatInDoubleRange(minSize, maxSize)
             };
 
-            var middle = new Point
+            float intersectionRatio1 = GetRandomFloat(0.2f, 0.8f);
+            var intersection = new Point
             {
-                X = (topRight.X + bottomLeft.X) / 2f,
-                Y = (topRight.Y + bottomLeft.Y) / 2f,
-                Z = (topRight.Z + bottomLeft.Z) / 2f
+                X = bottomLeft.X + (topRight.X - bottomLeft.X) * intersectionRatio1,
+                Y = bottomLeft.Y + (topRight.Y - bottomLeft.Y) * intersectionRatio1,
+                Z = bottomLeft.Z + (topRight.Z - bottomLeft.Z) * intersectionRatio1
             };
 
             var delta = new Point
             {
-                X = middle.X - topLeft.X,
-                Y = middle.Y - topLeft.Y,
-                Z = middle.Z - topLeft.Z
+                X = intersection.X - topLeft.X,
+                Y = intersection.Y - topLeft.Y,
+                Z = intersection.Z - topLeft.Z
             };
 
+            float intersectionRatio2 = GetRandomFloat(1.2f, 2.0f);
             var bottomRight = new Point
             {
-                X = topLeft.X + 2 * delta.X,
-                Y = topLeft.Y + 2 * delta.Y,
-                Z = topLeft.Z + 2 * delta.Z
+                X = topLeft.X + (intersection.X - topLeft.X) * intersectionRatio2,
+                Y = topLeft.Y + (intersection.Y - topLeft.Y) * intersectionRatio2,
+                Z = topLeft.Z + (intersection.Z - topLeft.Z) * intersectionRatio2
             };
 
             return new Quadrilateral
@@ -133,19 +157,42 @@ namespace ConvexHelper
             return vertices;
         }
 
+        private static float ConstraintToRange(float value, float min, float max)
+        {
+            if (value < min)
+                return min;
+
+            if (value > max)
+                return max;
+
+            return value;
+        }
+
+        private static Color GetRandomColor()
+        {
+            return new Color {
+                Red = GetRandomFloat(),
+                Green = GetRandomFloat(),
+                Blue = GetRandomFloat()
+            };
+        }
+
         public static List<Color> GetFaceColors(int width, int height, bool doubleSides = true)
         {
             var sides = doubleSides ? 2 : 1;
             var random = new Random();
             var colors = new List<Color>();
             int itemCount = sides * width * height;
+
+            Color primaryColor = GetRandomColor();
+
             for (int i = 0; i < itemCount; i++)
                 colors.Add(
                     new Color
                     {
-                        Red = (float)random.NextDouble(),
-                        Green = (float)random.NextDouble(),
-                        Blue = (float)random.NextDouble()
+                        Red = ConstraintToRange(primaryColor.Red + GetRandomFloat(-0.1f, 0.1f), 0, 1),
+                        Green = ConstraintToRange(primaryColor.Green + GetRandomFloat(-0.1f, 0.1f), 0, 1),
+                        Blue = ConstraintToRange(primaryColor.Blue + GetRandomFloat(-0.1f, 0.1f), 0, 1),
                     });
 
             return colors;
