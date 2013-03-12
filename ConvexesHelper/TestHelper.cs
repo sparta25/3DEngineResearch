@@ -37,13 +37,10 @@ namespace ConvexHelper
         public void Rotate()
         {
             int count = 0;
-            using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
+            
+            using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
             {
                 var sw = new Stopwatch();
-                ramCounter.CategoryName = "Memory";
-                ramCounter.CounterName = "Available Bytes";
-                var availableMemorySize = ramCounter.NextValue();
-
                 sw.Start();
 
                 while (sw.ElapsedMilliseconds < 10000)
@@ -53,24 +50,22 @@ namespace ConvexHelper
                     count++;
                     Logger.Instance.Info(new Statistics
                     {
-                        Memory = availableMemorySize - ramCounter.NextValue(),
+                        Memory = processRam.RawValue,
                         Duration = duration,
-                        Description = "Frame, Delta Memory, before available - after available "
+                        Description = "Frame",
+                        FramePerSecond = count / sw.Elapsed.TotalSeconds
                     });
-                    availableMemorySize = ramCounter.NextValue();
                 }
-                
-                double fps = count / sw.Elapsed.TotalSeconds;
-
-                sw.Stop();
                 
                 Logger.Instance.Info(new Statistics
                 {
-                    Memory = availableMemorySize - ramCounter.NextValue(),
+                    Memory = processRam.RawValue,
                     Duration = 10000,
-                    FramePerSecond = fps,
+                    FramePerSecond = count / sw.Elapsed.TotalSeconds,
                     Description = "Summary"
                 });
+
+                sw.Stop();
             }
         }
      
