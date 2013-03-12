@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace ConvexHelper
 {
@@ -7,16 +6,12 @@ namespace ConvexHelper
     {
         private readonly ITestable _testable;
 
-        private DateTime _fixedDateTime;
-
         public TestHelper(ITestable testable)
         {
             _testable = testable;
-            _testable.OnRotateStarting += OnRotateStartingHandler;
-            _testable.OnRotateStopped += OnRotateStoppedHandler;
         }
 
-        public void Render()
+        public void CreateScene()
         {
             using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
             {
@@ -26,7 +21,7 @@ namespace ConvexHelper
                 var availableMemorySize = ramCounter.NextValue();
 
                 sw.Start();
-                _testable.Render();
+                _testable.CreateScene();
                 var timeInMilliSeconds = sw.ElapsedMilliseconds;
                 sw.Stop();
 
@@ -40,6 +35,7 @@ namespace ConvexHelper
 
         public void Rotate()
         {
+            int count = 0;
             using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
             {
                 var sw = new Stopwatch();
@@ -48,48 +44,31 @@ namespace ConvexHelper
                 var availableMemorySize = ramCounter.NextValue();
 
                 sw.Start();
-                _testable.Rotate();
-                var timeInMilliSeconds = sw.ElapsedMilliseconds;
-                sw.Stop();
 
+                while (sw.ElapsedMilliseconds < 10000)
+                {
+                    var duration = sw.ElapsedMilliseconds;
+                    _testable.Rotate();
+                    count++;
+                    Logger.Instance.Info(new Statistics
+                    {
+                        Memory = ramCounter.NextValue(),
+                        Duration = duration
+                    });
+                }
+                
+                double fps = count / sw.Elapsed.TotalSeconds;
+
+                sw.Stop();
+                
                 Logger.Instance.Info(new Statistics
                 {
                     Memory = availableMemorySize - ramCounter.NextValue(),
-                    Duration = timeInMilliSeconds
+                    Duration = 10000,
+                    FramePerSecond = fps
                 });
             }
-
         }
-        
-        void OnRotateStartingHandler(object sender, RotateEventArgs e)
-        {
-            _fixedDateTime = e.FixedDateTime;
-            //Raise own event
-            OnOnRotateStarting(new RotateEventArgs{FixedDateTime = DateTime.Now});
-        }
-
-        void OnRotateStoppedHandler(object sender, RotateEventArgs e)
-        {
-            var delta = e.FixedDateTime.Subtract(_fixedDateTime).Milliseconds;
-            Logger.Instance.InfoFormat("Rotate operation takes {0} millisecond(s) ", delta);
-            //Raise own event
-            OnOnRotateStopped(new RotateEventArgs { FixedDateTime = DateTime.Now });
-        }
-        
-        public event EventHandler<RotateEventArgs> OnRotateStarting;
-
-        protected virtual void OnOnRotateStarting(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStarting;
-            if (handler != null) handler(this, e);
-        }
-
-        public event EventHandler<RotateEventArgs> OnRotateStopped;
-
-        protected virtual void OnOnRotateStopped(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStopped;
-            if (handler != null) handler(this, e);
-        }
+     
     }
 }

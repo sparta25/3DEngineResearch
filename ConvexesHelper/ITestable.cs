@@ -4,9 +4,7 @@ namespace ConvexHelper
 {
     public interface ITestable
     {
-        void Render();
+        void CreateScene();
         void Rotate();
-        event EventHandler<RotateEventArgs>  OnRotateStarting;
-        event EventHandler<RotateEventArgs> OnRotateStopped; 
     }
 }

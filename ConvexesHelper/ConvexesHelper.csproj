@@ -96,7 +96,6 @@
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quadrilateral.cs" />
-    <Compile Include="RotateEventArgs.cs" />
     <Compile Include="SerializationProvider.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="TestHelper.cs" />

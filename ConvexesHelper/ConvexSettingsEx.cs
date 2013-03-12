@@ -28,18 +28,6 @@ namespace ConvexHelper
                 settings.Planes.Add(plane);
             }
         }
-        
-        
-        //public static void FillVertices(this ConvexSettings settings)
-        //{
-        //    settings.Vertices = new List<Point>();
-        //    var quadrilaterals = ConvexGenerator.GenerateQuadrilaterals(settings);
-        //    foreach (var quad in quadrilaterals)
-        //    {
-        //        var vertices = ConvexGenerator.GetGridVertices(quad, settings.PartWidth, settings.PartHeight);
-        //        settings.Vertices.AddRange(vertices);    
-        //    }
-        //}
 
     }
 }

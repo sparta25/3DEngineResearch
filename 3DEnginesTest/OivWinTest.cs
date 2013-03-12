@@ -26,7 +26,7 @@ namespace _3DEnginesTest
         public void RenderTest()
         {
             var testHelper = new TestHelper(_indexedFaceSet);
-            testHelper.Render();
+            testHelper.CreateScene();
         }
 
         [Test]

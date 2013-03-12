@@ -36,7 +36,7 @@ namespace OVIConvexTest
 
             //Testing
             var testHelper = new TestHelper(this);
-            testHelper.Render();
+            testHelper.CreateScene();
             testHelper.Rotate();
 		}
 		#endregion
@@ -57,37 +57,36 @@ namespace OVIConvexTest
 
 		private void InitializeComponent()
 		{
-            _controlPanel = new Panel();
-            _viewerPanel = new Panel();
-            SuspendLayout();
+            this._controlPanel = new System.Windows.Forms.Panel();
+            this._viewerPanel = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
             // 
-            // controlPanel
+            // _controlPanel
             // 
-            _controlPanel.BorderStyle = BorderStyle.FixedSingle;
-            _controlPanel.Dock = DockStyle.Right;
-            _controlPanel.Location = new System.Drawing.Point(879, 0);
-            _controlPanel.Name = "_controlPanel";
-            _controlPanel.Size = new System.Drawing.Size(0, 523);
-            _controlPanel.TabIndex = 0;
+            this._controlPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._controlPanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this._controlPanel.Location = new System.Drawing.Point(879, 0);
+            this._controlPanel.Name = "_controlPanel";
+            this._controlPanel.Size = new System.Drawing.Size(0, 523);
+            this._controlPanel.TabIndex = 0;
             // 
-            // viewerPanel
+            // _viewerPanel
             // 
-            _viewerPanel.Dock = DockStyle.Fill;
-            _viewerPanel.Location = new System.Drawing.Point(0, 0);
-            _viewerPanel.Name = "_viewerPanel";
-            _viewerPanel.Size = new System.Drawing.Size(879, 523);
-            _viewerPanel.TabIndex = 1;
+            this._viewerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._viewerPanel.Location = new System.Drawing.Point(0, 0);
+            this._viewerPanel.Name = "_viewerPanel";
+            this._viewerPanel.Size = new System.Drawing.Size(879, 523);
+            this._viewerPanel.TabIndex = 1;
             // 
             // IndexedFaceSet
             // 
-            AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            ClientSize = new System.Drawing.Size(879, 523);
-            Controls.Add(_viewerPanel);
-            Controls.Add(_controlPanel);
-            Name = "IndexedFaceSet";
-            Text = "IndexedFaceSet - Main Form";
-            ResumeLayout(false);
-
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(879, 523);
+            this.Controls.Add(this._viewerPanel);
+            this.Controls.Add(this._controlPanel);
+            this.Name = "IndexedFaceSet";
+            this.Text = "IndexedFaceSet - Main Form";
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -135,7 +134,7 @@ namespace OVIConvexTest
         
         #region ITestable implementation
         
-        public void Render()
+        public void CreateScene()
         {
             _viewer =
                 new SoWinExaminerViewer(_parent, "Name", true,
@@ -200,7 +199,6 @@ namespace OVIConvexTest
         
         public void Rotate()
         {
-            OnRotateStartingHandler(new RotateEventArgs{FixedDateTime = DateTime.Now});
             Task.Factory.StartNew(() =>
             {
                 SbRotation currentRotation = _myRotation.rotation.Value;
@@ -226,23 +224,6 @@ namespace OVIConvexTest
                 }
                 sw.Stop();
             });
-            OnRotateStoppedHandler(new RotateEventArgs{FixedDateTime = DateTime.Now});
-        }
-
-        public event EventHandler<RotateEventArgs> OnRotateStarting;
-
-        protected virtual void OnRotateStartingHandler(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStarting;
-            if (handler != null) handler(this, e);
-        }
-
-        public event EventHandler<RotateEventArgs> OnRotateStopped;
-
-        protected virtual void OnRotateStoppedHandler(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStopped;
-            if (handler != null) handler(this, e);
         }
 
         #endregion

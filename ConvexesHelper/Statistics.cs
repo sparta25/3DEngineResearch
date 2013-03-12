@@ -5,5 +5,7 @@
         public float Memory { get; set; }
 
         public long Duration { get; set; }
+
+        public double FramePerSecond { get; set; }
     }
 }

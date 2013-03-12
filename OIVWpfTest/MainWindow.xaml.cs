@@ -21,7 +21,7 @@ namespace OIVWpfTest
         {
             InitializeComponent();
             var t = new TestHelper(this);
-            t.Render();
+            t.CreateScene();
         }
 
         private static IConvexSettings GetConvexSettings()
@@ -84,7 +84,7 @@ namespace OIVWpfTest
             return _root;
         } 
         
-        public void Render()
+        public void CreateScene()
         {
             // Create a form to contain the Open Inventor viewer
             System.Windows.Forms.Control viewerForm = new System.Windows.Forms.Control();
@@ -111,20 +111,5 @@ namespace OIVWpfTest
             throw new System.NotImplementedException();
         }
 
-        public event EventHandler<RotateEventArgs> OnRotateStarting;
-
-        protected virtual void OnOnRotateStarting(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStarting;
-            if (handler != null) handler(this, e);
-        }
-
-        public event EventHandler<RotateEventArgs> OnRotateStopped;
-
-        protected virtual void OnOnRotateStopped(RotateEventArgs e)
-        {
-            EventHandler<RotateEventArgs> handler = OnRotateStopped;
-            if (handler != null) handler(this, e);
-        }
     }
 }
