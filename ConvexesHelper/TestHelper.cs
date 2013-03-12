@@ -28,7 +28,8 @@ namespace ConvexHelper
                 Logger.Instance.Info(new Statistics
                 {
                     Memory = availableMemorySize - ramCounter.NextValue(),
-                    Duration = timeInMilliSeconds
+                    Duration = timeInMilliSeconds,
+                    Description = "Setup"
                 });
             }
         }
@@ -52,9 +53,11 @@ namespace ConvexHelper
                     count++;
                     Logger.Instance.Info(new Statistics
                     {
-                        Memory = ramCounter.NextValue(),
-                        Duration = duration
+                        Memory = availableMemorySize - ramCounter.NextValue(),
+                        Duration = duration,
+                        Description = "Frame, Delta Memory, before available - after available "
                     });
+                    availableMemorySize = ramCounter.NextValue();
                 }
                 
                 double fps = count / sw.Elapsed.TotalSeconds;
@@ -65,7 +68,8 @@ namespace ConvexHelper
                 {
                     Memory = availableMemorySize - ramCounter.NextValue(),
                     Duration = 10000,
-                    FramePerSecond = fps
+                    FramePerSecond = fps,
+                    Description = "Summary"
                 });
             }
         }

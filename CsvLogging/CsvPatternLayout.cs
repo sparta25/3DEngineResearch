@@ -28,10 +28,11 @@ namespace CsvLogging
                 }
             }
 
-            CsvTextWriter ctw = new CsvTextWriter(writer);
+            var ctw = new CsvTextWriter(writer);
             // write the starting quote for the first field
             ctw.WriteQuote();
             base.Format(ctw, loggingEvent);
         }
+        
     }
 }
