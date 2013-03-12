@@ -58,12 +58,6 @@
     <Compile Include="Vec3FsToPointConvertorExt.cs" />
     <Compile Include="Vec3FToPointConvertorExt.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConvexesHelper\TestFramework.csproj">
-      <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
-      <Name>TestFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

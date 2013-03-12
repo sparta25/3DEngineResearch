@@ -37,15 +37,14 @@ namespace TestOivWinForms
             
         }
 
-        private ConvexSettings GetSceneSettings(TextReader reader)
-        {
-            return SerializationProvider.LoadFromXml<ConvexSettings>(reader);
-        }
-
         private ConvexSettings GetSceneSettings()
         {
             var settingsFile = ConfigurationManager.AppSettings["SettingsFile"];
-            return SerializationProvider.LoadFromXml<ConvexSettings>(settingsFile);
+
+            if (settingsFile != null)
+                return SerializationProvider.LoadFromXml<ConvexSettings>(settingsFile);
+            else
+                return SerializationProvider.LoadFromXml<ConvexSettings>(Console.In);
         }
         
         private void CreateFaceSets()
@@ -117,8 +116,7 @@ namespace TestOivWinForms
 
         private void SetupScene()
         {
-            //_scene = GetSceneSettings();
-            _scene = GetSceneSettings(Console.In);
+            _scene = GetSceneSettings();
 
             _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length / 2, _scene.BoundaryBox.Width / 2, _scene.BoundaryBox.Height / 2);
 
