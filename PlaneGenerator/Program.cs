@@ -29,7 +29,7 @@ namespace PlaneGenerator
             scene.FillPlanes();
             scene.FillIndices();
             
-            SerializationProvider.DumpToXml(Console.Out, scene);
+            SerializationHelper.DumpToXml(Console.Out, scene);
         }
     }
 }

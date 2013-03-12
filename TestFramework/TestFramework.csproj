@@ -96,7 +96,7 @@
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quadrilateral.cs" />
-    <Compile Include="SerializationProvider.cs" />
+    <Compile Include="SerializationHelper.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>

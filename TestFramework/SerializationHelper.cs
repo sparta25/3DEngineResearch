@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace TestFramework
 {
-    public class SerializationProvider
+    public class SerializationHelper
     {
         public static void Dump(string fullFilePath, object obj)
         {

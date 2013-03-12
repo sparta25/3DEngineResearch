@@ -5,11 +5,11 @@ namespace TestFramework
 {
     public class ConvexGenerator
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random Random = new Random();
 
         private static float GetRandomFloat()
         {
-            return (float)_random.NextDouble();
+            return (float)Random.NextDouble();
         }
 
         private static float GetRandomFloat(float max)
@@ -24,18 +24,7 @@ namespace TestFramework
 
         private static float GetRandomFloatInDoubleRange(float min, float max)
         {
-            return (_random.Next(2) == 0 ? -1 : 1) * GetRandomFloat(min, max);
-        }
-
-        public static IEnumerable<Quadrilateral> GenerateQuadrilaterals(IConvexSettings settings)
-        {
-            var list = new List<Quadrilateral>();
-            for (int i = 0; i < settings.NumberOfPlanes; i++)
-            {
-                list.Add(GenerateRandomQuadrilateral(settings.BoundaryBox, settings.MinFractureSize, settings.MaxFractureSize));
-            }
-
-            return list;
+            return (Random.Next(2) == 0 ? -1 : 1) * GetRandomFloat(min, max);
         }
 
         public static Quadrilateral GenerateRandomQuadrilateral(BoundaryBox box, float minSize, float maxSize)
@@ -211,11 +200,6 @@ namespace TestFramework
         private static int GetVertexIndex(int width, int x, int y)
         {
             return y * (width + 1) + x;
-        }
-        
-        private static float BoundToAbsMin(float value, float min)
-        {
-            return value >= 0 ? value + min : value - min;
         }
         
     }
