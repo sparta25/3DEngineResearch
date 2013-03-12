@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using OIV.Inventor.Nodes;
 using OIV.Inventor;
 using OIV.Inventor.Win;
-using ConvexHelper;
+using TestFramework;
 using OIVCommon;
 using System.Configuration;
 
@@ -37,15 +37,14 @@ namespace TestOivWinForms
             
         }
 
-        private ConvexSettings GetSceneSettings(TextReader reader)
-        {
-            return SerializationProvider.LoadFromXml<ConvexSettings>(reader);
-        }
-
         private ConvexSettings GetSceneSettings()
         {
             var settingsFile = ConfigurationManager.AppSettings["SettingsFile"];
-            return SerializationProvider.LoadFromXml<ConvexSettings>(settingsFile);
+
+            if (settingsFile != null)
+                return SerializationProvider.LoadFromXml<ConvexSettings>(settingsFile);
+            else
+                return SerializationProvider.LoadFromXml<ConvexSettings>(Console.In);
         }
         
         private void CreateFaceSets()
@@ -118,7 +117,6 @@ namespace TestOivWinForms
         private void SetupScene()
         {
             _scene = GetSceneSettings();
-            //_scene = GetScene(Console.In);
 
             _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length / 2, _scene.BoundaryBox.Width / 2, _scene.BoundaryBox.Height / 2);
 
@@ -135,7 +133,7 @@ namespace TestOivWinForms
 
         private void _buttonRotate_Click(object sender, EventArgs e)
         {
-            _testHelper.Rotate();
+            _testHelper.Render();
         }
 
         #region ITestable
@@ -145,7 +143,7 @@ namespace TestOivWinForms
             SetupScene();
         }
 
-        public void Rotate()
+        public void Render()
         {
             const float step = 0.01f;
             _camera.position.Value = GetCameraPosition(_angle);

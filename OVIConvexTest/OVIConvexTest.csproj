@@ -120,10 +120,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConvexesHelper\ConvexesHelper.csproj">
-      <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
-      <Name>ConvexesHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CsvLogging\CsvLogging.csproj">
       <Project>{E623AB30-A65B-4010-ADDA-8FE23E4152F4}</Project>
       <Name>CsvLogging</Name>

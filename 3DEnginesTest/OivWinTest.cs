@@ -1,5 +1,5 @@
 ﻿using System;
-using ConvexHelper;
+using TestFramework;
 using NUnit.Framework;
 using OVIConvexTest;
 
@@ -33,7 +33,7 @@ namespace _3DEnginesTest
         public void RotateTest()
         {
             var testHelper = new TestHelper(_indexedFaceSet);
-            testHelper.Rotate();
+            testHelper.Render();
         }
 
     }

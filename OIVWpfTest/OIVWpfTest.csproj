@@ -119,10 +119,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConvexesHelper\ConvexesHelper.csproj">
-      <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
-      <Name>ConvexesHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OIVCommon\OIVCommon.csproj">
       <Project>{C7327460-EE8D-4AB8-A48D-1B40396E13A2}</Project>
       <Name>OIVCommon</Name>
