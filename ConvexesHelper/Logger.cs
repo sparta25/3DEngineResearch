@@ -1,7 +1,8 @@
 ﻿using log4net;
 using log4net.Config;
 using System.Reflection;
-namespace ConvexHelper
+
+namespace TestFramework
 {
     /// <summary>
     /// Central Logger for all, Singleton

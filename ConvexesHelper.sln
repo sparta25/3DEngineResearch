@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvexesHelper", "ConvexesHelper\ConvexesHelper.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFramework", "ConvexesHelper\TestFramework.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVIConvexTest", "OVIConvexTest\OVIConvexTest.csproj", "{42A12003-842C-4743-8E60-75B30490A0DA}"
 EndProject

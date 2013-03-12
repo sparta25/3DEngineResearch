@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConvexHelper
+namespace TestFramework
 {
     [Serializable]
     public class Plane

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ConvexHelper;
+using TestFramework;
 using OIV.Inventor;
 using OIV.Inventor.Win.Viewers;
 using OIV.Inventor.Nodes;
@@ -37,7 +37,7 @@ namespace OVIConvexTest
             //Testing
             var testHelper = new TestHelper(this);
             testHelper.CreateScene();
-            testHelper.Rotate();
+            testHelper.Render();
 		}
 		#endregion
 
@@ -197,7 +197,7 @@ namespace OVIConvexTest
             _viewer.ViewAll();
         }
         
-        public void Rotate()
+        public void Render()
         {
             Task.Factory.StartNew(() =>
             {

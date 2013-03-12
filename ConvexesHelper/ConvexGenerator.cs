@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConvexHelper
+namespace TestFramework
 {
     public class ConvexGenerator
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{B2A8E094-D480-4846-B033-6B35FC93523C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConvexHelper</RootNamespace>
-    <AssemblyName>ConvexHelper</AssemblyName>
+    <RootNamespace>TestFramework</RootNamespace>
+    <AssemblyName>TestFramework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

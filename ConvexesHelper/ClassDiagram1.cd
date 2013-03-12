@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="ConvexHelper.ConvexGenerator">
+  <Class Name="TestFramework.ConvexGenerator">
     <Position X="10.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAAAAAAAAAAACAwAAAAAAAQAAgAAAAAACAAMAAAAA=</HashCode>
       <FileName>ConvexGenerator.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ConvexHelper.Logger">
+  <Class Name="TestFramework.Logger">
     <Position X="12" Y="0.5" Width="1.5" />
     <NestedTypes>
-      <Class Name="ConvexHelper.Logger.Nested" Collapsed="true">
+      <Class Name="TestFramework.Logger.Nested" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Logger.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -21,14 +21,14 @@
       <FileName>Logger.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ConvexHelper.SerializationProvider" Collapsed="true">
+  <Class Name="TestFramework.SerializationProvider" Collapsed="true">
     <Position X="2.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>SerializationProvider.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ConvexHelper.TestHelper" BaseTypeListCollapsed="true">
+  <Class Name="TestFramework.TestHelper" BaseTypeListCollapsed="true">
     <Position X="8.25" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAA=</HashCode>
@@ -36,42 +36,42 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Struct Name="ConvexHelper.BoundaryBox">
+  <Struct Name="TestFramework.BoundaryBox">
     <Position X="4" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAEBAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>BoundaryBox.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="ConvexHelper.Color">
+  <Struct Name="TestFramework.Color">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
       <FileName>Color.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="ConvexHelper.Point">
+  <Struct Name="TestFramework.Point">
     <Position X="0.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
       <FileName>Point.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="ConvexHelper.Quadrilateral">
+  <Struct Name="TestFramework.Quadrilateral">
     <Position X="2.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgAAAAAIAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
       <FileName>Quadrilateral.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Interface Name="ConvexHelper.IConvexSettings">
+  <Interface Name="TestFramework.IConvexSettings">
     <Position X="6" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAABEEAAAAACAgAAgAAAAAAAAAAAEAAIgAAAAAA=</HashCode>
       <FileName>IConvexSettings.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="ConvexHelper.ITestable">
+  <Interface Name="TestFramework.ITestable">
     <Position X="8.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAA=</HashCode>

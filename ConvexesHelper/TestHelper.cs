@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ConvexHelper
+namespace TestFramework
 {
     public class TestHelper : ITestable
     {
@@ -33,7 +33,7 @@ namespace ConvexHelper
             }
         }
 
-        public void Rotate()
+        public void Render()
         {
             int count = 0;
             using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
@@ -48,7 +48,7 @@ namespace ConvexHelper
                 while (sw.ElapsedMilliseconds < 10000)
                 {
                     var duration = sw.ElapsedMilliseconds;
-                    _testable.Rotate();
+                    _testable.Render();
                     count++;
                     Logger.Instance.Info(new Statistics
                     {

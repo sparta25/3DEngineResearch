@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConvexHelper
+namespace TestFramework
 {
     [Serializable]
     public struct Point

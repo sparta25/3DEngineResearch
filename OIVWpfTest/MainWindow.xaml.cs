@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using ConvexHelper;
+using TestFramework;
 using OIV.Inventor.Win.Viewers;
 using OIV.Inventor.Nodes;
 using OIVCommon;
@@ -106,7 +106,7 @@ namespace OIVWpfTest
             m_viewer.ViewAll();
         }
 
-        public void Rotate()
+        public void Render()
         {
             throw new System.NotImplementedException();
         }

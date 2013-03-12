@@ -119,9 +119,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConvexesHelper\ConvexesHelper.csproj">
+    <ProjectReference Include="..\ConvexesHelper\TestFramework.csproj">
       <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
-      <Name>ConvexesHelper</Name>
+      <Name>TestFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\OIVCommon\OIVCommon.csproj">
       <Project>{C7327460-EE8D-4AB8-A48D-1B40396E13A2}</Project>
