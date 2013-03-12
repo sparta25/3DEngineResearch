@@ -7,5 +7,7 @@
         public long Duration { get; set; }
 
         public double FramePerSecond { get; set; }
+
+        public string Description { get; set; }
     }
 }
