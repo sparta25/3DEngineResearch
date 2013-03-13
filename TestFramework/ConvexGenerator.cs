@@ -212,11 +212,5 @@ namespace TestFramework
         {
             return y * (width + 1) + x;
         }
-        
-        private static float BoundToAbsMin(float value, float min)
-        {
-            return value >= 0 ? value + min : value - min;
-        }
-        
     }
 }
