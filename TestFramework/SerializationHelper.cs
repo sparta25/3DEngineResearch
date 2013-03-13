@@ -15,7 +15,7 @@ namespace TestFramework
             using (var s = new FileStream(fullFilePath, FileMode.CreateNew, FileAccess.Write))
             {
                 var bf = new BinaryFormatter();
-                
+
                 bf.Serialize(s, obj);
             }
         }
@@ -26,7 +26,7 @@ namespace TestFramework
             using (var s = new FileStream(fullFilePath, FileMode.Open, FileAccess.Read))
             {
                 var bf = new BinaryFormatter();
-                t = (T)bf.Deserialize(s);
+                t = (T) bf.Deserialize(s);
             }
             return t;
         }
@@ -39,7 +39,7 @@ namespace TestFramework
             }
             using (var s = new FileStream(fullFilePath, FileMode.CreateNew, FileAccess.Write))
             {
-                var ser = new XmlSerializer(typeof(T));
+                var ser = new XmlSerializer(typeof (T));
 
                 ser.Serialize(s, t);
             }
@@ -47,7 +47,7 @@ namespace TestFramework
 
         public static void DumpToXml<T>(TextWriter writer, T @object)
         {
-            var serializer = new XmlSerializer(typeof(T));
+            var serializer = new XmlSerializer(typeof (T));
             serializer.Serialize(writer, @object);
         }
 
@@ -56,16 +56,16 @@ namespace TestFramework
             T t;
             using (var s = new FileStream(fullFilePath, FileMode.Open, FileAccess.Read))
             {
-                var ser = new XmlSerializer(typeof(T));
-                t = (T)ser.Deserialize(s);
+                var ser = new XmlSerializer(typeof (T));
+                t = (T) ser.Deserialize(s);
             }
             return t;
         }
 
         public static T LoadFromXml<T>(TextReader reader)
         {
-            var serializer = new XmlSerializer(typeof(T));
-            return (T)serializer.Deserialize(reader);
+            var serializer = new XmlSerializer(typeof (T));
+            return (T) serializer.Deserialize(reader);
         }
     }
 }

@@ -14,58 +14,61 @@ namespace TestFramework
         public void CreateScene()
         {
             //using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
-            using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
+            using (
+                var processRam = new PerformanceCounter("Process", "Working Set",
+                                                        Process.GetCurrentProcess().ProcessName))
             {
                 var sw = new Stopwatch();
-                
+
                 sw.Start();
                 _testable.CreateScene();
-                var timeInMilliSeconds = sw.ElapsedMilliseconds;
+                long timeInMilliSeconds = sw.ElapsedMilliseconds;
                 sw.Stop();
 
                 Logger.Instance.Info(new Statistics
-                {
-                    Memory = processRam.RawValue / 1024F,
-                    Duration = timeInMilliSeconds,
-                    Description = "Setup"
-                });
+                    {
+                        Memory = processRam.RawValue/1024F,
+                        Duration = timeInMilliSeconds,
+                        Description = "Setup"
+                    });
             }
         }
 
         public void Render()
         {
             int count = 0;
-            
-            using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
+
+            using (
+                var processRam = new PerformanceCounter("Process", "Working Set",
+                                                        Process.GetCurrentProcess().ProcessName))
             {
                 var sw = new Stopwatch();
                 sw.Start();
 
                 while (sw.ElapsedMilliseconds < 10000)
                 {
-                    var duration = sw.ElapsedMilliseconds;
+                    long duration = sw.ElapsedMilliseconds;
                     _testable.Render();
                     count++;
                     Logger.Instance.Info(new Statistics
-                    {
-                        Memory = processRam.RawValue / 1024F,
-                        Duration = duration,
-                        Description = "Frame",
-                        FramePerSecond = count / sw.Elapsed.TotalSeconds
-                    });
+                        {
+                            Memory = processRam.RawValue/1024F,
+                            Duration = duration,
+                            Description = "Frame",
+                            FramePerSecond = count/sw.Elapsed.TotalSeconds
+                        });
                 }
-                
+
                 Logger.Instance.Info(new Statistics
-                {
-                    Memory = processRam.RawValue / 1024F,
-                    Duration = 10000,
-                    FramePerSecond = count / sw.Elapsed.TotalSeconds,
-                    Description = "Summary"
-                });
+                    {
+                        Memory = processRam.RawValue/1024F,
+                        Duration = 10000,
+                        FramePerSecond = count/sw.Elapsed.TotalSeconds,
+                        Description = "Summary"
+                    });
 
                 sw.Stop();
             }
         }
-     
     }
 }

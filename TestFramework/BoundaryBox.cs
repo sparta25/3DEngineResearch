@@ -6,17 +6,17 @@ namespace TestFramework
     public struct BoundaryBox
     {
         /// <summary>
-        /// Z dimension
+        ///     Z dimension
         /// </summary>
         public float Height { get; set; }
 
         /// <summary>
-        /// Y dimension
+        ///     Y dimension
         /// </summary>
         public float Width { get; set; }
 
         /// <summary>
-        /// X dimension
+        ///     X dimension
         /// </summary>
         public float Length { get; set; }
     }

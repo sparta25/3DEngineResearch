@@ -1,26 +1,25 @@
 ﻿using System;
-using System.IO;
+using System.Configuration;
 using System.Linq;
 using System.Windows.Forms;
-using OIV.Inventor.Nodes;
 using OIV.Inventor;
+using OIV.Inventor.Nodes;
 using OIV.Inventor.Win;
-using TestFramework;
 using OIVCommon;
-using System.Configuration;
+using TestFramework;
 
 namespace TestOivWinForms
 {
     public partial class TestForm : Form, ITestable
     {
-        private readonly SoSeparator _root;
+        private readonly float _radius;
         private readonly SoWinRenderArea _renderArea;
+        private readonly SoSeparator _root;
+        private readonly ConvexSettings _scene;
+        private readonly SbVec3f _sceneCenter;
         private readonly TestHelper _testHelper;
-        SoPerspectiveCamera _camera;
-        SbVec3f _sceneCenter;
-        float _radius;
-        ConvexSettings _scene;
-        float _angle = 0;
+        private float _angle;
+        private SoPerspectiveCamera _camera;
 
         public TestForm()
         {
@@ -29,21 +28,44 @@ namespace TestOivWinForms
             _renderArea = new SoWinRenderArea(_panelView);
             _root = new SoSeparator();
             _scene = GetSceneSettings();
+            _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length/2, _scene.BoundaryBox.Width/2,
+                                       _scene.BoundaryBox.Height/2);
+            _radius = new[] {_scene.BoundaryBox.Length, _scene.BoundaryBox.Width, _scene.BoundaryBox.Height}.Max()*2;
+
             CreateCamera();
             CreateLights();
-            
+
             _testHelper = new TestHelper(this);
             _testHelper.CreateScene();
-            
         }
 
-        private ConvexSettings GetSceneSettings()
-        {
-            var settingsFile = ConfigurationManager.AppSettings["SettingsFile"];
+        #region ITestable
 
-            return settingsFile != null 
-                ? SerializationHelper.LoadFromXml<ConvexSettings>(settingsFile) 
-                : SerializationHelper.LoadFromXml<ConvexSettings>(Console.In);
+        public void CreateScene()
+        {
+            SetupScene();
+        }
+
+        public void Render()
+        {
+            const float step = 0.01f;
+            _camera.position.Value = GetCameraPosition(_angle, _radius, _sceneCenter);
+            _camera.PointAt(_sceneCenter);
+            _renderArea.Render();
+            _angle += step;
+        }
+
+        #endregion
+
+        #region private methods
+
+        private static ConvexSettings GetSceneSettings()
+        {
+            string settingsFile = ConfigurationManager.AppSettings["SettingsFile"];
+
+            return settingsFile != null
+                       ? SerializationHelper.LoadFromXml<ConvexSettings>(settingsFile)
+                       : SerializationHelper.LoadFromXml<ConvexSettings>(Console.In);
         }
 
         private void CreateFaceSets()
@@ -55,17 +77,17 @@ namespace TestOivWinForms
 
             int[] grid = _scene.Indices.ToArray();
 
-            foreach (var plane in _scene.Planes)
+            foreach (Plane plane in _scene.Planes)
             {
                 // Using the new SoVertexProperty node is more efficient
                 var myVertexProperty = new SoVertexProperty();
 
-                var colors = plane.Colors.ToArrayOfVec3F();
+                SbVec3f[] colors = plane.Colors.ToArrayOfVec3F();
 
                 // Define colors for the faces
                 for (int k = 0; k < colors.Length; k++)
                     myVertexProperty.orderedRGBA[k] = new SbColor(colors[k]).GetPackedValue();
-                
+
 
                 myVertexProperty.materialBinding.Value = SoVertexProperty.Bindings.PER_FACE;
 
@@ -101,26 +123,22 @@ namespace TestOivWinForms
             _root.AddChild(_camera);
         }
 
-        private void SetupCamera()
+        private void SetupCamera(float radius, SbVec3f sceneCenter)
         {
-            _camera.position.Value = GetCameraPosition(0);
-            _camera.PointAt(_sceneCenter);
+            _camera.position.Value = GetCameraPosition(0, radius, sceneCenter);
+            _camera.PointAt(sceneCenter);
         }
 
-        private SbVec3f GetCameraPosition(float angle)
+        private static SbVec3f GetCameraPosition(float angle, float radius, SbVec3f sceneCenter)
         {
-            return new SbVec3f((float)(_radius * Math.Cos(angle) + _sceneCenter.X),
-                _sceneCenter.Y, (float)(_radius * Math.Sin(angle) + _sceneCenter.Z));
+            return new SbVec3f((float) (radius*Math.Cos(angle) + sceneCenter.X),
+                               sceneCenter.Y, (float) (radius*Math.Sin(angle) + sceneCenter.Z));
         }
 
         private void SetupScene()
         {
-            _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length / 2, _scene.BoundaryBox.Width / 2, _scene.BoundaryBox.Height / 2);
-
-            _radius = new[] { _scene.BoundaryBox.Length, _scene.BoundaryBox.Width, _scene.BoundaryBox.Height }.Max() * 2;
-            
             CreateFaceSets();
-            SetupCamera();
+            SetupCamera(_radius, _sceneCenter);
 
             _renderArea.SetSceneGraph(_root);
             _renderArea.SetAutoRedraw(false);
@@ -132,24 +150,6 @@ namespace TestOivWinForms
             _testHelper.Render();
         }
 
-        #region ITestable
-
-        public void CreateScene()
-        {
-            SetupScene();
-        }
-
-        public void Render()
-        {
-            const float step = 0.01f;
-            _camera.position.Value = GetCameraPosition(_angle);
-            _camera.PointAt(_sceneCenter);
-            _renderArea.Render();
-            _angle += step;
-        }
-        
         #endregion
-
-        
     }
 }

@@ -5,14 +5,13 @@ using log4net.Layout;
 
 namespace CsvLogging
 {
-
     public class CsvPatternLayout : PatternLayout
     {
         public override void ActivateOptions()
         {
             // register custom pattern tokens
-            AddConverter("newfield", typeof(NewFieldConverter));
-            AddConverter("endrow", typeof(EndRowConverter));
+            AddConverter("newfield", typeof (NewFieldConverter));
+            AddConverter("endrow", typeof (EndRowConverter));
             base.ActivateOptions();
         }
 
@@ -33,6 +32,5 @@ namespace CsvLogging
             ctw.WriteQuote();
             base.Format(ctw, loggingEvent);
         }
-        
     }
 }

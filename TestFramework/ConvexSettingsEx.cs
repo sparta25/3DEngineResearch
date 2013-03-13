@@ -16,18 +16,18 @@ namespace TestFramework
             for (int i = 0; i < settings.NumberOfPlanes; i++)
             {
                 var plane = new Plane();
-                var colors = ConvexGenerator.GetFaceColors(settings.PartWidth, settings.PartHeight);
-                
+                List<Color> colors = ConvexGenerator.GetFaceColors(settings.PartWidth, settings.PartHeight);
+
                 plane.Colors = colors;
-                var quadrilateral = ConvexGenerator.GenerateRandomQuadrilateral(settings.BoundaryBox,
-                                                                                settings.MinFractureSize,
-                                                                                settings.MaxFractureSize);
-                var vertices = ConvexGenerator.GetGridVertices(quadrilateral, settings.PartWidth, settings.PartHeight);
+                Quadrilateral quadrilateral = ConvexGenerator.GenerateRandomQuadrilateral(settings.BoundaryBox,
+                                                                                          settings.MinFractureSize,
+                                                                                          settings.MaxFractureSize);
+                Point[] vertices = ConvexGenerator.GetGridVertices(quadrilateral, settings.PartWidth,
+                                                                   settings.PartHeight);
                 plane.Vertices = new List<Point>();
                 plane.Vertices.AddRange(vertices);
                 settings.Planes.Add(plane);
             }
         }
-
     }
 }

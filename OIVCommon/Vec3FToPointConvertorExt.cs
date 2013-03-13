@@ -1,5 +1,5 @@
-﻿using TestFramework;
-using OIV.Inventor;
+﻿using OIV.Inventor;
+using TestFramework;
 
 namespace OIVCommon
 {
@@ -9,7 +9,7 @@ namespace OIVCommon
         {
             return new Point
                 {
-                    X= v.X,
+                    X = v.X,
                     Y = v.Y,
                     Z = v.Z
                 };

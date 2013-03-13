@@ -1,5 +1,5 @@
-﻿using TestFramework;
-using OIV.Inventor;
+﻿using OIV.Inventor;
+using TestFramework;
 
 namespace OIVCommon
 {

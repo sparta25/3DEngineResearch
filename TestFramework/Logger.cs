@@ -1,45 +1,40 @@
-﻿using log4net;
+﻿using System.Reflection;
+using log4net;
 using log4net.Config;
-using System.Reflection;
 
 namespace TestFramework
 {
     /// <summary>
-    /// Central Logger for all, Singleton
+    ///     Central Logger for all, Singleton
     /// </summary>
     public class Logger
     {
-        Logger()
-        { }
+        private Logger()
+        {
+        }
 
         /// <summary>
-        /// Logger Instance
+        ///     Logger Instance
         /// </summary>
         public static ILog Instance
         {
-            get
-            {
-                return Nested.instance.GetLogInstance(Assembly.GetCallingAssembly().GetName().Name);
-            }
+            get { return Nested.instance.GetLogInstance(Assembly.GetCallingAssembly().GetName().Name); }
         }
 
-        ILog GetLogInstance(string name)
+        private ILog GetLogInstance(string name)
         {
             ILog log = LogManager.GetLogger(name);
             return log;
         }
 
-        class Nested
+        private class Nested
         {
+            internal static readonly Logger instance = new Logger();
+
             static Nested()
             {
                 XmlConfigurator.Configure();
             }
-
-            internal static readonly Logger instance = new Logger();
         }
     }
-    
 }
-
-

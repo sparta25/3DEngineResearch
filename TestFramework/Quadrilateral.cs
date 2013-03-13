@@ -12,6 +12,5 @@ namespace TestFramework
         public Point BottomLeft { get; set; }
 
         public Point BottomRight { get; set; }
-
     }
 }

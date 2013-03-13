@@ -7,7 +7,7 @@ namespace CsvLogging
     {
         protected override void Convert(TextWriter writer, object state)
         {
-            CsvTextWriter ctw = writer as CsvTextWriter;
+            var ctw = writer as CsvTextWriter;
             // write the ending quote for the last field
             if (ctw != null)
                 ctw.WriteQuote();

@@ -1,5 +1,5 @@
-﻿using TestFramework;
-using OIV.Inventor;
+﻿using OIV.Inventor;
+using TestFramework;
 
 namespace OIVCommon
 {
@@ -8,7 +8,7 @@ namespace OIVCommon
         public static Point[] ToArrayOfPoint(this SbVec3f[] vecs)
         {
             var points = new Point[vecs.Length];
-            for (var i = 0; i < vecs.Length; i++)
+            for (int i = 0; i < vecs.Length; i++)
             {
                 points[i] = vecs[i].ConvertToPoint();
             }

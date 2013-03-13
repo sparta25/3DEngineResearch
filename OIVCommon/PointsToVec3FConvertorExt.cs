@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using TestFramework;
 using OIV.Inventor;
+using TestFramework;
 
 namespace OIVCommon
 {
@@ -10,7 +9,7 @@ namespace OIVCommon
         public static SbVec3f[] ToArrayOfVec3F(this IList<Point> points)
         {
             var vec = new SbVec3f[points.Count];
-            for (var i = 0; i < points.Count; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 vec[i] = points[i].ConvertToVec3F();
             }
