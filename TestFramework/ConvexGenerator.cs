@@ -180,7 +180,7 @@ namespace TestFramework
             return colors;
         }
 
-        private static Point GetNthPoint(Point first, Point last, int parts, int n)
+        public static Point GetNthPoint(Point first, Point last, int parts, int n)
         {
             var point = new Point
                 {
@@ -191,7 +191,7 @@ namespace TestFramework
             return point;
         }
 
-        private static int GetVertexIndex(int width, int x, int y)
+        public static int GetVertexIndex(int width, int x, int y)
         {
             return y*(width + 1) + x;
         }

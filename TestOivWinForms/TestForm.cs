@@ -28,6 +28,7 @@ namespace TestOivWinForms
             _renderArea = new SoWinRenderArea(_panelView);
             _root = new SoSeparator();
             _scene = GetSceneSettings();
+            
             _sceneCenter = new SbVec3f(_scene.BoundaryBox.Length/2, _scene.BoundaryBox.Width/2,
                                        _scene.BoundaryBox.Height/2);
             _radius = new[] {_scene.BoundaryBox.Length, _scene.BoundaryBox.Width, _scene.BoundaryBox.Height}.Max()*2;
