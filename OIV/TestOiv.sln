@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFramework", "TestFramework\TestFramework.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFramework", "..\Common\TestFramework\TestFramework.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOivWinForms", "OIV\TestOivWinForms\TestOivWinForms.csproj", "{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOivWinForms", "TestOivWinForms\TestOivWinForms.csproj", "{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneGenerator", "PlaneGenerator\PlaneGenerator.csproj", "{8D21F120-E17E-4924-941E-5F8A1FFF5801}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneGenerator", "..\Common\PlaneGenerator\PlaneGenerator.csproj", "{8D21F120-E17E-4924-941E-5F8A1FFF5801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIVCommon", "OIV\OIVCommon\OIVCommon.csproj", "{C7327460-EE8D-4AB8-A48D-1B40396E13A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIVCommon", "OIVCommon\OIVCommon.csproj", "{C7327460-EE8D-4AB8-A48D-1B40396E13A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLogging", "CsvLogging\CsvLogging.csproj", "{E623AB30-A65B-4010-ADDA-8FE23E4152F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLogging", "..\Common\CsvLogging\CsvLogging.csproj", "{E623AB30-A65B-4010-ADDA-8FE23E4152F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
