@@ -99,7 +99,7 @@
     <None Include="runTest.bat" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CsvLogging\CsvLogging.csproj">
+    <ProjectReference Include="..\..\CsvLogging\CsvLogging.csproj">
       <Project>{E623AB30-A65B-4010-ADDA-8FE23E4152F4}</Project>
       <Name>CsvLogging</Name>
     </ProjectReference>
@@ -107,7 +107,7 @@
       <Project>{C7327460-EE8D-4AB8-A48D-1B40396E13A2}</Project>
       <Name>OIVCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TestFramework\TestFramework.csproj">
+    <ProjectReference Include="..\..\TestFramework\TestFramework.csproj">
       <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
       <Name>TestFramework</Name>
     </ProjectReference>
