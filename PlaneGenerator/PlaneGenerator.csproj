@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\BoundaryBoxSizeProperty.cs" />
+    <Compile Include="Configuration\CreationHelper.cs" />
     <Compile Include="Configuration\GridSizeProperty.cs" />
     <Compile Include="Configuration\PlaneGeneratorConfiguration.cs" />
     <Compile Include="Configuration\QuadrilateralSizeProperty.cs" />

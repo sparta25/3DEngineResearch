@@ -4,3 +4,4 @@
 *.csproj.user
 bin/
 obj/
+TestResults
