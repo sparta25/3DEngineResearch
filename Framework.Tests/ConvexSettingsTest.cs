@@ -26,8 +26,8 @@ namespace Framework.Tests
         [TestMethod]
         public void GetQuadrilateralByPositionTest()
         {
-            var lastX = target.PartWidth;
-            var lastY = target.PartHeight;
+            var lastX = target.PartWidth - 1;
+            var lastY = target.PartHeight - 1;
             var plane = target.Planes[0];
 
             target.GetQuadrilateralByPosition(plane, lastX, lastY);

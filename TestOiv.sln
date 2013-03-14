@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateTest", "SharpDX\RotateTest\RotateTest.csproj", "{3DA5D20C-76DE-4201-B793-28F35A68205A}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TestOiv.vsmdi
@@ -98,6 +100,16 @@ Global
 		{F826BA87-2050-4EC9-9E66-8CF14F81F6DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F826BA87-2050-4EC9-9E66-8CF14F81F6DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F826BA87-2050-4EC9-9E66-8CF14F81F6DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.ActiveCfg = Debug|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.Build.0 = Debug|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Any CPU.ActiveCfg = Release|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.ActiveCfg = Release|x86
+		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
