@@ -93,11 +93,12 @@ namespace ConsoleApplication1
                               ToVector4(rect.BottomLeft),  ToVector4(color),
                               ToVector4(rect.TopLeft),     ToVector4(color),
                               ToVector4(rect.TopRight),    ToVector4(color),
-                              ToVector4(rect.TopRight),    ToVector4(color),
-                              ToVector4(rect.BottomRight), ToVector4(color),
-                              ToVector4(rect.BottomLeft),  ToVector4(color),
+
+                              //ToVector4(rect.TopRight),    ToVector4(color),
+                              //ToVector4(rect.BottomRight), ToVector4(color),
+                              //ToVector4(rect.BottomLeft),  ToVector4(color),
                           })
-                         .SelectMany(vs => vs)
+                         .SelectMany(_ => _)
                          .ToArray();
 
             // Instantiate Vertex buiffer from vertex data
@@ -141,7 +142,7 @@ namespace ConsoleApplication1
             // Готовим матрицы
             // вида     : это вроде как камера
             // проекции : это описание того, как проектировать на экран
-            var view = Matrix.LookAtLH(new Vector3(0, 0, -5f), new Vector3(0, 0, 0), Vector3.UnitY);
+            var view = Matrix.LookAtLH(new Vector3(0.0f, 0.0f, -5f), new Vector3(0.2f, 0.2f, 0.2f), Vector3.UnitY);
             var proj = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, form.ClientSize.Width / (float)form.ClientSize.Height, 0.1f, 100.0f);
             // умножая матрицы мы получим матрицу, которая содержит информацию и о камере и о том, как переносить точку из трехмерного пространства на двухмерное,
             // т.е. на экран пользователя
@@ -172,6 +173,8 @@ namespace ConsoleApplication1
                     Matrix.RotationZ(time * .1f) *
                     viewProj;
                 // нахера транспонировать?
+                // Ответ: для перевода привычной системы отсчета в систему отчета по правилу левой руки,
+                // в которой работает DirectX
                 worldViewProj.Transpose();
 
                 // обновляем данные для шейдеров, а конкретнее матрицу, на которую надо умножить каждую вершину, чтобы повернуть наш куб
