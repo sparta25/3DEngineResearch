@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIVCommon", "OIV\OIVCommon\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLogging", "CsvLogging\CsvLogging.csproj", "{E623AB30-A65B-4010-ADDA-8FE23E4152F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateTest", "SharpDX\RotateTest\RotateTest.csproj", "{3DA5D20C-76DE-4201-B793-28F35A68205A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,16 +76,6 @@ Global
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|x86.ActiveCfg = Release|Any CPU
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.Build.0 = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Any CPU.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.Build.0 = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
