@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFramework", "TestFramework\TestFramework.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFramework", "..\Common\TestFramework\TestFramework.csproj", "{B2A8E094-D480-4846-B033-6B35FC93523C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOivWinForms", "OIV\TestOivWinForms\TestOivWinForms.csproj", "{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOivWinForms", "TestOivWinForms\TestOivWinForms.csproj", "{BC6A1479-D375-4BDA-BE05-DD2D0703B86D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneGenerator", "PlaneGenerator\PlaneGenerator.csproj", "{8D21F120-E17E-4924-941E-5F8A1FFF5801}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneGenerator", "..\Common\PlaneGenerator\PlaneGenerator.csproj", "{8D21F120-E17E-4924-941E-5F8A1FFF5801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIVCommon", "OIV\OIVCommon\OIVCommon.csproj", "{C7327460-EE8D-4AB8-A48D-1B40396E13A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIVCommon", "OIVCommon\OIVCommon.csproj", "{C7327460-EE8D-4AB8-A48D-1B40396E13A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLogging", "CsvLogging\CsvLogging.csproj", "{E623AB30-A65B-4010-ADDA-8FE23E4152F4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateTest", "SharpDX\RotateTest\RotateTest.csproj", "{3DA5D20C-76DE-4201-B793-28F35A68205A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLogging", "..\Common\CsvLogging\CsvLogging.csproj", "{E623AB30-A65B-4010-ADDA-8FE23E4152F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,16 +76,6 @@ Global
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E623AB30-A65B-4010-ADDA-8FE23E4152F4}.Release|x86.ActiveCfg = Release|Any CPU
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.ActiveCfg = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Debug|x86.Build.0 = Debug|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Any CPU.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|Mixed Platforms.Build.0 = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.ActiveCfg = Release|x86
-		{3DA5D20C-76DE-4201-B793-28F35A68205A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

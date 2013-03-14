@@ -59,7 +59,7 @@
     <Compile Include="Vec3FToPointConvertorExt.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TestFramework\TestFramework.csproj">
+    <ProjectReference Include="..\..\Common\TestFramework\TestFramework.csproj">
       <Project>{B2A8E094-D480-4846-B033-6B35FC93523C}</Project>
       <Name>TestFramework</Name>
     </ProjectReference>
