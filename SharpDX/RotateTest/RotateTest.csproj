@@ -44,8 +44,8 @@
     <Reference Include="SharpDX.D3DCompiler">
       <HintPath>..\..\..\..\..\Downloads\Bin\Standard-net40\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D10">
-      <HintPath>..\..\..\..\..\Downloads\Bin\Standard-net40\SharpDX.Direct3D10.dll</HintPath>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\..\..\..\..\Downloads\Bin\Standard-net40\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
       <HintPath>..\..\..\..\..\Downloads\Bin\Standard-net40\SharpDX.DXGI.dll</HintPath>
@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,7 +62,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TestFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\TestFramework\bin\Debug\TestFramework.dll</HintPath>
+      <HintPath>..\..\Common\TestFramework\bin\Debug\TestFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +70,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\Common\PlaneGenerator\bin\Debug\dump.xml">
+      <Link>dump.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MiniCube.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -78,6 +83,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Common\PlaneGenerator\bin\Debug\dump.json">
+      <Link>dump.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

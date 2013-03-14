@@ -9,11 +9,12 @@ using System.Xml.Serialization;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
-using SharpDX.Direct3D10;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Windows;
 
 using TestFramework;
+using System.Runtime.Serialization.Json;
 
 namespace ConsoleApplication1
 {
@@ -39,14 +40,14 @@ namespace ConsoleApplication1
             };
 
             // Create Device and SwapChain
-            SharpDX.Direct3D10.Device device;
+            SharpDX.Direct3D11.Device device;
             SwapChain swapChain;
             // создаем SwapChain - набор буферов для отрисовки
             // эти буферы необходимы для того, чтобы синхронизировать монитор и конвеер. 
             // Дело в том, безопасно обновлять изображение на мониторе можно только после того, как 
             // будет выведено предидущие изображение.
-            SharpDX.Direct3D10.Device.CreateWithSwapChain(SharpDX.Direct3D10.DriverType.Hardware, DeviceCreationFlags.None, desc, out device, out swapChain);
-            var context = device;
+            SharpDX.Direct3D11.Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, desc, out device, out swapChain);
+            var context = device.ImmediateContext;
 
             // Ignore all windows events
 
@@ -79,8 +80,8 @@ namespace ConsoleApplication1
                         new InputElement("COLOR", 0, Format.R32G32B32A32_Float, 16, 0)
                     });
 
-            var settingsSerializer = new XmlSerializer(typeof(ConvexSettings));
-            var sceneDescription = (ConvexSettings)settingsSerializer.Deserialize(new FileStream("Dump.txt", FileMode.Open));
+            var settingsSerializer = new DataContractJsonSerializer(typeof(ConvexSettings));
+            var sceneDescription = (ConvexSettings)settingsSerializer.ReadObject(new FileStream("Dump.json", FileMode.Open));
 
             var result = (from x in Enumerable.Range(0, sceneDescription.PartHeight)
                           from y in Enumerable.Range(0, sceneDescription.PartWidth)
@@ -94,20 +95,20 @@ namespace ConsoleApplication1
                               ToVector4(rect.TopLeft),     ToVector4(color),
                               ToVector4(rect.TopRight),    ToVector4(color),
 
-                              //ToVector4(rect.TopRight),    ToVector4(color),
-                              //ToVector4(rect.BottomRight), ToVector4(color),
-                              //ToVector4(rect.BottomLeft),  ToVector4(color),
+                              ToVector4(rect.TopRight),    ToVector4(color),
+                              ToVector4(rect.BottomRight), ToVector4(color),
+                              ToVector4(rect.BottomLeft),  ToVector4(color),
                           })
                          .SelectMany(_ => _)
                          .ToArray();
 
             // Instantiate Vertex buiffer from vertex data
             // Буфер с описанием вершин ХАРДКОР
-            var vertices = SharpDX.Direct3D10.Buffer.Create(device, BindFlags.VertexBuffer, result);
+            var vertices = SharpDX.Direct3D11.Buffer.Create(device, BindFlags.VertexBuffer, result);
 
             // Create Constant Buffer
             // буфер констант. Используется для передачи данных между оперативной памятью и памятью видеокарты
-            var contantBuffer = new SharpDX.Direct3D10.Buffer(device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None);
+            var contantBuffer = new SharpDX.Direct3D11.Buffer(device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
 
             // Create Depth Buffer & View
             // Буфер глубины он же Z буфер
@@ -137,12 +138,18 @@ namespace ConsoleApplication1
             context.VertexShader.Set(vertexShader);
             context.Rasterizer.SetViewports(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
             context.PixelShader.Set(pixelShader);
+
+            var rastStage = SharpDX.Direct3D11.RasterizerStateDescription.Default();
+            rastStage.CullMode = CullMode.None;
+            var rs = new RasterizerState(context.Device, rastStage);
+            context.Rasterizer.State = rs;
+
             
             // Prepare matrices
             // Готовим матрицы
             // вида     : это вроде как камера
             // проекции : это описание того, как проектировать на экран
-            var view = Matrix.LookAtLH(new Vector3(0.0f, 0.0f, -5f), new Vector3(0.2f, 0.2f, 0.2f), Vector3.UnitY);
+            var view = Matrix.LookAtLH(new Vector3(0.0f, 0.0f, -3f), new Vector3(0.2f, 0.2f, 0.2f), Vector3.UnitY);
             var proj = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, form.ClientSize.Width / (float)form.ClientSize.Height, 0.1f, 100.0f);
             // умножая матрицы мы получим матрицу, которая содержит информацию и о камере и о том, как переносить точку из трехмерного пространства на двухмерное,
             // т.е. на экран пользователя
