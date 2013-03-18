@@ -15,8 +15,17 @@ namespace PlaneGenerator
 
             scene.FillPlanes();
             scene.FillIndices();
-
-            SerializationHelper.DumpToXml(Console.Out, scene);
+            if (args.Length != 0 && args[0].ToLowerInvariant() == "json")
+            {
+                using (var outStream = Console.OpenStandardOutput())
+                {
+                    SerializationHelper.DumpToJson(outStream, scene);
+                }
+            }
+            else
+            {
+                SerializationHelper.DumpToXml(Console.Out, scene);
+            }
         }
     }
 }

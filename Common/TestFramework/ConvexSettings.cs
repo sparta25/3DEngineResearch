@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace TestFramework
 {
     [Serializable]
+    [DataContract]
     public class ConvexSettings : IConvexSettings
     {
         public ConvexSettings()
@@ -20,20 +22,28 @@ namespace TestFramework
             MaxFractureSize = maxFractureSize;
         }
 
+        [DataMember]
         public int NumberOfPlanes { get; set; }
 
+        [DataMember]
         public int PartHeight { get; set; }
 
+        [DataMember]
         public int PartWidth { get; set; }
 
+        [DataMember]
         public float MinFractureSize { get; set; }
 
+        [DataMember]
         public float MaxFractureSize { get; set; }
 
+        [DataMember]
         public BoundaryBox BoundaryBox { get; set; }
 
+        [DataMember]
         public List<int> Indices { get; set; }
 
+        [DataMember]
         public List<Plane> Planes { get; set; }
 
         public Quadrilateral GetQuadrilateralByPosition(Plane plane, int positionX, int positionY )

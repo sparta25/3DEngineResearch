@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 using System.Xml.Serialization;
 
 namespace TestFramework
@@ -49,6 +50,12 @@ namespace TestFramework
         {
             var serializer = new XmlSerializer(typeof (T));
             serializer.Serialize(writer, @object);
+        }
+
+        public static void DumpToJson<T>(Stream stream, T obj)
+        {
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            serializer.WriteObject(stream, obj);
         }
 
         public static T LoadFromXml<T>(string fullFilePath)
