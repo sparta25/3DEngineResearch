@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 
 using SharpDX;
 using SharpDX.D3DCompiler;
@@ -14,9 +14,8 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 
 using TestFramework;
-using System.Runtime.Serialization.Json;
 
-namespace ConsoleApplication1
+namespace SharpDXTests
 {
     class Program
     {
@@ -81,7 +80,7 @@ namespace ConsoleApplication1
                     });
 
             var settingsSerializer = new DataContractJsonSerializer(typeof(ConvexSettings));
-            var sceneDescription = (ConvexSettings)settingsSerializer.ReadObject(new FileStream("Dump.json", FileMode.Open));
+            var sceneDescription = (ConvexSettings)settingsSerializer.ReadObject(new FileStream("data\\Dump.json", FileMode.Open));
 
             var result = (from x in Enumerable.Range(0, sceneDescription.PartHeight)
                           from y in Enumerable.Range(0, sceneDescription.PartWidth)
@@ -139,6 +138,7 @@ namespace ConsoleApplication1
             context.Rasterizer.SetViewports(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
             context.PixelShader.Set(pixelShader);
 
+            // Треугольники должны быть видимы в обеих сторон
             var rastStage = SharpDX.Direct3D11.RasterizerStateDescription.Default();
             rastStage.CullMode = CullMode.None;
             var rs = new RasterizerState(context.Device, rastStage);
