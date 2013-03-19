@@ -38,8 +38,7 @@ namespace SharpDXTests
         private InputLayout _layout;
         private Texture2D _backBuffer;
         private Factory _factory;
-        private readonly ManualResetEvent _disposingFlag = new ManualResetEvent(false);
-
+        
         [STAThread]
         static void Main(string[] args)
         {
@@ -48,7 +47,7 @@ namespace SharpDXTests
                 var testHelper = new TestHelper(program);
                 testHelper.SetNotifier(program);
                 testHelper.CreateScene();
-                testHelper.Render();    
+                program.Render();
             }
         }
         
@@ -85,7 +84,6 @@ namespace SharpDXTests
 
         public void Dispose()
         {
-            _disposingFlag.Set();
             Dispose(true);
 
             // Use SupressFinalize in case a subclass 
