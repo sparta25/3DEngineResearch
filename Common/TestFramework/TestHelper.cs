@@ -11,6 +11,7 @@ namespace TestFramework
         private int _frameCount;
         private TimeSpan _previousTime;
         private long _memory;
+
         public TestHelper(ITestable testable)
         {
             _testable = testable;
@@ -30,9 +31,8 @@ namespace TestFramework
             _frameCount = 0;
             _previousTime = TimeSpan.Zero;
         }
-
-
-        #region MyRegion
+        
+        #region Notifications handlers
 
         void notifier_Start(object sender, System.EventArgs e)
         {
@@ -66,6 +66,8 @@ namespace TestFramework
 
         #endregion
 
+        #region ITestable
+        
         public void CreateScene()
         {
             using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
@@ -120,5 +122,7 @@ namespace TestFramework
                 sw.Stop();
             }
         }
+
+        #endregion
     }
 }

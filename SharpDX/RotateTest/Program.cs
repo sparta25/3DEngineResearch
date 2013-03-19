@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -13,9 +15,10 @@ using TestFramework;
 
 namespace SharpDXTests
 {
+    
     class Program : ITestable, INotifier, IDisposable
     {
-        private readonly RenderForm _form = new RenderForm();
+        private RenderForm _form = new RenderForm();
         private DeviceContext _context;
         private RenderTargetView _renderView;
         private readonly ConvexSettings _sceneDescription = SerializationHelper.LoadFromJson<ConvexSettings>(ConfigurationManager.AppSettings["SettingsFile"]);
@@ -35,7 +38,9 @@ namespace SharpDXTests
         private InputLayout _layout;
         private Texture2D _backBuffer;
         private Factory _factory;
+        private readonly ManualResetEvent _disposingFlag = new ManualResetEvent(false);
 
+        [STAThread]
         static void Main(string[] args)
         {
             using (var program = new Program())
@@ -72,19 +77,15 @@ namespace SharpDXTests
 
                     if (_swapChain != null) _swapChain.Dispose();
                     if (_factory != null) _factory.Dispose();
-                    if (_form != null)
-                    {
-                        _form.Close();
-                        _form.Dispose();
-                    }
                 }
-
+                
                 _disposed = true;
             }
         }
 
         public void Dispose()
         {
+            _disposingFlag.Set();
             Dispose(true);
 
             // Use SupressFinalize in case a subclass 
@@ -230,44 +231,45 @@ namespace SharpDXTests
             // Use clock
             var clock = new Stopwatch();
             clock.Start();
-            
+
+            RenderLoop.UseCustomDoEvents = false;
             // Main loop
             RenderLoop.Run(_form, () =>
-            {
-                OnStart();
-                var time = clock.ElapsedMilliseconds / 1000.0f;
+                {
+                    OnStart();
+                    var time = clock.ElapsedMilliseconds / 1000.0f;
 
-                // Clear views
-                // чистим от предидущих выводов
-                _context.OutputMerger.SetTargets(_depthView, _renderView);
+                    // Clear views
+                    // чистим от предидущих выводов
+                    _context.OutputMerger.SetTargets(_depthView, _renderView);
 
-                _context.ClearDepthStencilView(_depthView, DepthStencilClearFlags.Depth, 1.0f, 0);
-                _context.ClearRenderTargetView(_renderView, SharpDX.Color.Black);
+                    _context.ClearDepthStencilView(_depthView, DepthStencilClearFlags.Depth, 1.0f, 0);
+                    _context.ClearRenderTargetView(_renderView, SharpDX.Color.Black);
 
-                // Update WorldViewProj Matrix
-                var worldViewProj =
-                    Matrix.RotationX(time / 3) *
-                    Matrix.RotationY(time / 2) *
-                    Matrix.RotationZ(time * .1f) *
-                    viewProj;
-                // нахера транспонировать?
-                // Ответ: для перевода привычной системы отсчета в систему отчета по правилу левой руки,
-                // в которой работает DirectX
-                worldViewProj.Transpose();
+                    // Update WorldViewProj Matrix
+                    var worldViewProj =
+                        Matrix.RotationX(time / 3) *
+                        Matrix.RotationY(time / 2) *
+                        Matrix.RotationZ(time * .1f) *
+                        viewProj;
+                    // нахера транспонировать?
+                    // Ответ: для перевода привычной системы отсчета в систему отчета по правилу левой руки,
+                    // в которой работает DirectX
+                    worldViewProj.Transpose();
 
-                // обновляем данные для шейдеров, а конкретнее матрицу, на которую надо умножить каждую вершину, чтобы повернуть наш куб
-                _context.UpdateSubresource(ref worldViewProj, _constantBuffer);
-                
-                OnFinish();
-                
-                // Draw the cube
-                // отрисовать куб!
-                _context.Draw(_result.Length, 0);
+                    // обновляем данные для шейдеров, а конкретнее матрицу, на которую надо умножить каждую вершину, чтобы повернуть наш куб
+                    _context.UpdateSubresource(ref worldViewProj, _constantBuffer);
 
-                // Present!
-                // континиус!
-                _swapChain.Present(0, PresentFlags.None);
-            });
+                    OnFinish();
+
+                    // Draw the cube
+                    // отрисовать куб!
+                    _context.Draw(_result.Length, 0);
+
+                    // Present!
+                    // континиус!
+                    _swapChain.Present(0, PresentFlags.None);
+                });
         }
 
         #endregion
