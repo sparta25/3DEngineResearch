@@ -5,8 +5,10 @@ using System.Windows.Forms;
 using OIV.Inventor;
 using OIV.Inventor.Nodes;
 using OIV.Inventor.Win;
+using OIV.Inventor.Actions;
 using OIVCommon;
 using TestFramework;
+using OIV.Inventor.Win.Viewers;
 
 namespace TestOivWinForms
 {
@@ -14,6 +16,9 @@ namespace TestOivWinForms
     {
         private readonly float _radius;
         private readonly SoWinRenderArea _renderArea;
+        // Create a viewer
+        private SoWinExaminerViewer myViewer;
+
         private readonly SoSeparator _root;
         private readonly ConvexSettings _scene;
         private readonly SbVec3f _sceneCenter;
@@ -24,8 +29,9 @@ namespace TestOivWinForms
         public TestForm()
         {
             InitializeComponent();
-
-            _renderArea = new SoWinRenderArea(_panelView);
+            
+            //_renderArea = new SoWinRenderArea(_panelView);
+            myViewer = new SoWinExaminerViewer(this, "", true, SoWinFullViewer.BuildFlags.BUILD_ALL, SoWinViewer.Types.BROWSER);
             _root = new SoSeparator();
             _scene = GetSceneSettings();
             
@@ -45,6 +51,11 @@ namespace TestOivWinForms
         public void CreateScene()
         {
             SetupScene();
+            //SoOutput output = new SoOutput();
+            //output.OpenFile("output.iv");
+            //SoWriteAction writeAction = new SoWriteAction(output);
+            //writeAction.Apply(_root);
+            //output.CloseFile();
         }
 
         public void Render()
@@ -75,6 +86,12 @@ namespace TestOivWinForms
             shapeHints.vertexOrdering.Value = SoShapeHints.VertexOrderings.COUNTERCLOCKWISE;
             shapeHints.shapeType.Value = SoShapeHints.ShapeTypes.SOLID;
             _root.AddChild(shapeHints);
+            
+            // Add a rotor node to spin the vanes
+            SoRotor myRotor = new SoRotor();
+            myRotor.rotation.SetValue(new SbVec3f(0.0f, 1.0f, 0.0f), (float)(Math.PI / 32.0f)); // z axis
+            myRotor.speed.Value = 1.0f;
+            _root.AddChild(myRotor);
 
             int[] grid = _scene.Indices.ToArray();
 
@@ -140,15 +157,18 @@ namespace TestOivWinForms
         {
             CreateFaceSets();
             SetupCamera(_radius, _sceneCenter);
+            myViewer.SetSceneGraph(_root);
+            myViewer.SetTitle("OIV Test");
 
-            _renderArea.SetSceneGraph(_root);
-            _renderArea.SetAutoRedraw(false);
-            _renderArea.Render();
+
+            //_renderArea.SetSceneGraph(_root);
+            //_renderArea.SetAutoRedraw(false);
+            //_renderArea.Render();
         }
 
         private void _buttonRotate_Click(object sender, EventArgs e)
         {
-            _testHelper.Render();
+            //_testHelper.Render();
         }
 
         #endregion

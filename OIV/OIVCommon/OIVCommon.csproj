@@ -31,15 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OIV.Inventor, Version=9.2.1.0, Culture=neutral, PublicKeyToken=cc281c744497d5fd, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Open Inventor\9.2.1 .NET Visual2010 x64\assemblies\arch-Windows-x86_64-msvc10-Debug\OIV.Inventor.dll</HintPath>
+    <Reference Include="OIV.Inventor">
+      <HintPath>..\..\..\..\Open Inventor\9.2.1 .NET Visual2010 x64\assemblies\arch-Windows-x86_64-msvc10-Release\OIV.Inventor.dll</HintPath>
     </Reference>
     <Reference Include="OIV.Inventor.Base">
-      <HintPath>..\ThirdParty\OIV.Inventor.Base.dll</HintPath>
+      <HintPath>..\..\..\..\Open Inventor\9.2.1 .NET Visual2010 x64\assemblies\arch-Windows-x86_64-msvc10-Release\OIV.Inventor.Base.dll</HintPath>
     </Reference>
     <Reference Include="OIV.Inventor.SbLinear">
-      <HintPath>..\ThirdParty\OIV.Inventor.SbLinear.dll</HintPath>
+      <HintPath>..\..\..\..\Open Inventor\9.2.1 .NET Visual2010 x64\assemblies\arch-Windows-x86_64-msvc10-Release\OIV.Inventor.SbLinear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

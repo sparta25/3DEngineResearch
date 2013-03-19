@@ -58,6 +58,19 @@ namespace TestFramework
             serializer.WriteObject(stream, obj);
         }
 
+        
+        public static T LoadFromJson<T>(string fullFilePath)
+        {
+            T sceneDescription;
+            
+            using (var s = new FileStream(fullFilePath, FileMode.Open, FileAccess.Read))
+            {
+                var settingsSerializer = new DataContractJsonSerializer(typeof(T));
+                sceneDescription = (T)settingsSerializer.ReadObject(s);
+            }
+            return sceneDescription;
+        }
+
         public static T LoadFromXml<T>(string fullFilePath)
         {
             T t;

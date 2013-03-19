@@ -1,22 +1,74 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace TestFramework
 {
     public class TestHelper : ITestable
     {
         private readonly ITestable _testable;
-
+        private INotifier _notifier;
+        private Stopwatch _clock;
+        private int _frameCount;
+        private TimeSpan _previousTime;
+        private long _memory;
         public TestHelper(ITestable testable)
         {
             _testable = testable;
         }
 
+        public void SetNotifier(INotifier notifier)
+        {
+            _notifier = notifier;
+            if (_notifier != null)
+            {
+                Debug.WriteLine("subscription");
+                _notifier.Start += notifier_Start;
+                _notifier.Finish += notifier_Finish;
+            }
+            _clock = new Stopwatch();
+            _clock.Start();
+            _frameCount = 0;
+            _previousTime = TimeSpan.Zero;
+        }
+
+
+        #region MyRegion
+
+        void notifier_Start(object sender, System.EventArgs e)
+        {
+            Debug.WriteLine("OnStart");
+            using (var processRam = new PerformanceCounter("Process", "Working Set",Process.GetCurrentProcess().ProcessName))
+            {
+                _memory = processRam.RawValue / 1024;
+            }
+        }
+
+        void notifier_Finish(object sender, System.EventArgs e)
+        {
+            Debug.WriteLine("OnFinish " + _clock.Elapsed.Seconds);
+            Debug.WriteLine("_previousTime " + _previousTime);
+
+            if (_clock.Elapsed.Seconds != _previousTime.Seconds)
+            {
+                Logger.Instance.Info(new Statistics
+                {
+                    Memory = _memory,
+                    Duration = _clock.ElapsedMilliseconds,
+                    Description = "Frame",
+                    FramePerSecond = _frameCount
+                });
+                _frameCount = 0;
+            }
+
+            _previousTime = _clock.Elapsed;
+            _frameCount++;
+        }
+
+        #endregion
+
         public void CreateScene()
         {
-            //using (var ramCounter = new PerformanceCounter("Memory", "Available Bytes"))
-            using (
-                var processRam = new PerformanceCounter("Process", "Working Set",
-                                                        Process.GetCurrentProcess().ProcessName))
+            using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
             {
                 var sw = new Stopwatch();
 
@@ -27,7 +79,7 @@ namespace TestFramework
 
                 Logger.Instance.Info(new Statistics
                     {
-                        Memory = processRam.RawValue/1024F,
+                        Memory = processRam.RawValue/1024,
                         Duration = timeInMilliSeconds,
                         Description = "Setup"
                     });
@@ -38,9 +90,7 @@ namespace TestFramework
         {
             int count = 0;
 
-            using (
-                var processRam = new PerformanceCounter("Process", "Working Set",
-                                                        Process.GetCurrentProcess().ProcessName))
+            using (var processRam = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName))
             {
                 var sw = new Stopwatch();
                 sw.Start();
@@ -52,7 +102,7 @@ namespace TestFramework
                     count++;
                     Logger.Instance.Info(new Statistics
                         {
-                            Memory = processRam.RawValue/1024F,
+                            Memory = processRam.RawValue/1024,
                             Duration = duration,
                             Description = "Frame",
                             FramePerSecond = count/sw.Elapsed.TotalSeconds
@@ -61,7 +111,7 @@ namespace TestFramework
 
                 Logger.Instance.Info(new Statistics
                     {
-                        Memory = processRam.RawValue/1024F,
+                        Memory = processRam.RawValue/1024,
                         Duration = 10000,
                         FramePerSecond = count/sw.Elapsed.TotalSeconds,
                         Description = "Summary"

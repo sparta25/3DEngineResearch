@@ -2,7 +2,7 @@
 {
     public class Statistics : IStatistics
     {
-        public float Memory { get; set; }
+        public long Memory { get; set; }
 
         public long Duration { get; set; }
 

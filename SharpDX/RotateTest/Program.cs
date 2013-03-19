@@ -1,11 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Xml.Linq;
-
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -17,78 +13,152 @@ using TestFramework;
 
 namespace SharpDXTests
 {
-    class Program
+    class Program : ITestable, INotifier, IDisposable
     {
+        private readonly RenderForm _form = new RenderForm();
+        private DeviceContext _context;
+        private RenderTargetView _renderView;
+        private readonly ConvexSettings _sceneDescription = SerializationHelper.LoadFromJson<ConvexSettings>(ConfigurationManager.AppSettings["SettingsFile"]);
+        
+        // Create Device and SwapChain
+        private SharpDX.Direct3D11.Device _device;
+        private SwapChain _swapChain;
+        private Vector4[] _result;
+        private DepthStencilView _depthView;
+        private SharpDX.Direct3D11.Buffer _constantBuffer;
+        private bool _disposed = false;
+        private CompilationResult _vertexShaderByteCode;
+        private VertexShader _vertexShader;
+        private CompilationResult _pixelShaderByteCode;
+        private PixelShader _pixelShader;
+        private SharpDX.Direct3D11.Buffer _vertices;
+        private InputLayout _layout;
+        private Texture2D _backBuffer;
+        private Factory _factory;
+
         static void Main(string[] args)
         {
-            var form = new RenderForm();
+            using (var program = new Program())
+            {
+                var testHelper = new TestHelper(program);
+                testHelper.SetNotifier(program);
+                testHelper.CreateScene();
+                testHelper.Render();    
+            }
+        }
+        
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Release all resources
+                    _vertexShaderByteCode.Dispose();
+                    if (_vertexShader != null) _vertexShader.Dispose();
+                    if (_pixelShaderByteCode != null) _pixelShaderByteCode.Dispose();
+                    if (_pixelShader != null) _pixelShader.Dispose();
+                    if (_vertices != null) _vertices.Dispose();
+                    if (_layout != null) _layout.Dispose();
+                    if (_renderView != null) _renderView.Dispose();
+                    if (_backBuffer != null) _backBuffer.Dispose();
+                    if (_context != null)
+                    {
+                        _context.ClearState();
+                        _context.Flush();
+                        _context.Dispose();
+                    }
+                    if (_device != null) _device.Dispose();
 
+                    if (_swapChain != null) _swapChain.Dispose();
+                    if (_factory != null) _factory.Dispose();
+                    if (_form != null)
+                    {
+                        _form.Close();
+                        _form.Dispose();
+                    }
+                }
+
+                _disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+
+            // Use SupressFinalize in case a subclass 
+            // of this type implements a finalizer.
+            GC.SuppressFinalize(this); 
+        }
+
+        static Vector4 ToVector4(Point point) { return new Vector4(point.X, point.Y, point.Z, 1f); }
+
+        static Vector4 ToVector4(TestFramework.Color color) { return new Vector4(color.Red, color.Green, color.Blue, 1f); }
+
+        #region ITestable
+        
+        public void CreateScene()
+        {
             // SwapChain description
             // Параметры SwapChain, описание смотри ниже
             var desc = new SwapChainDescription
             {
                 BufferCount = 1,
                 ModeDescription =
-                    new ModeDescription(form.ClientSize.Width, form.ClientSize.Height,
+                    new ModeDescription(_form.ClientSize.Width, _form.ClientSize.Height,
                                         new Rational(60, 1), Format.R8G8B8A8_UNorm),
                 IsWindowed = true,
-                OutputHandle = form.Handle,
+                OutputHandle = _form.Handle,
                 SampleDescription = new SampleDescription(1, 0),
                 SwapEffect = SwapEffect.Discard,
                 Usage = Usage.RenderTargetOutput
             };
 
-            // Create Device and SwapChain
-            SharpDX.Direct3D11.Device device;
-            SwapChain swapChain;
             // создаем SwapChain - набор буферов для отрисовки
             // эти буферы необходимы для того, чтобы синхронизировать монитор и конвеер. 
             // Дело в том, безопасно обновлять изображение на мониторе можно только после того, как 
             // будет выведено предидущие изображение.
-            SharpDX.Direct3D11.Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, desc, out device, out swapChain);
-            var context = device.ImmediateContext;
+            SharpDX.Direct3D11.Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.None, desc, out _device, out _swapChain);
+            _context = _device.ImmediateContext;
 
             // Ignore all windows events
-
-            var factory = swapChain.GetParent<Factory>();
-            factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
+            _factory = _swapChain.GetParent<Factory>();
+            _factory.MakeWindowAssociation(_form.Handle, WindowAssociationFlags.IgnoreAll);
 
             // New RenderTargetView from the backbuffer
             // получаем один буферов из SwapChain.
             // Это фоновый буфер, куда отрисовывается следующие изображение в то время как на экран выводится текущее.
-            var backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-            var renderView = new RenderTargetView(device, backBuffer);
+            _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
+            _renderView = new RenderTargetView(_device, _backBuffer);
 
             // Compile Vertex and Pixel shaders
             // Читаем из файла шейдер: небольшую подпрограммку для GPU. Vertex shader это вершинный шейдер - подпрограммка 
             // которая принимает на вход матрицу описывающую положение вершины (точки) в пространстве
             // точка входа функция VS
             // vs_4_0 - профиль шейдера, по сути версия шейдера. Видеокарты поддерживают 
-            var vertexShaderByteCode = ShaderBytecode.CompileFromFile("MiniCube.fx", "VS", "vs_4_0");
-            var vertexShader = new VertexShader(device, vertexShaderByteCode);
+            _vertexShaderByteCode = ShaderBytecode.CompileFromFile("MiniCube.fx", "VS", "vs_4_0");
+            _vertexShader = new VertexShader(_device, _vertexShaderByteCode);
 
             // Тоже самое с писсельным шейдером, только имя точки входа тут PS
-            var pixelShaderByteCode = ShaderBytecode.CompileFromFile("MiniCube.fx", "PS", "ps_4_0");
-            var pixelShader = new PixelShader(device, pixelShaderByteCode);
+            _pixelShaderByteCode = ShaderBytecode.CompileFromFile("MiniCube.fx", "PS", "ps_4_0");
+            _pixelShader = new PixelShader(_device, _pixelShaderByteCode);
 
             // Layout from VertexShader input signature
             // Описываем вход стадии InputAssembler, а имеено вершинный шейдер и те данные (которые возьмутся из буфера вершин (см. ниже) которые пойдут на вход этой стадии)
-            var layout = new InputLayout(device, ShaderSignature.GetInputSignature(vertexShaderByteCode), new[]
+            _layout = new InputLayout(_device, ShaderSignature.GetInputSignature(_vertexShaderByteCode), new[]
                     {
                         new InputElement("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
                         new InputElement("COLOR", 0, Format.R32G32B32A32_Float, 16, 0)
                     });
 
-            var settingsSerializer = new DataContractJsonSerializer(typeof(ConvexSettings));
-            var sceneDescription = (ConvexSettings)settingsSerializer.ReadObject(new FileStream("data\\Dump.json", FileMode.Open));
-
-            var result = (from x in Enumerable.Range(0, sceneDescription.PartHeight)
-                          from y in Enumerable.Range(0, sceneDescription.PartWidth)
-                          from plane in sceneDescription.Planes
-                          let rect = sceneDescription.GetQuadrilateralByPosition(plane, x, y)
-                          let colorIndex = x * sceneDescription.PartWidth + y
-                          let color = plane.Colors[colorIndex]
-                          select new[] 
+            _result = (from x in Enumerable.Range(0, _sceneDescription.PartHeight)
+                       from y in Enumerable.Range(0, _sceneDescription.PartWidth)
+                       from plane in _sceneDescription.Planes
+                       let rect = _sceneDescription.GetQuadrilateralByPosition(plane, x, y)
+                       let colorIndex = x * _sceneDescription.PartWidth + y
+                       let color = plane.Colors[colorIndex]
+                       select new[] 
                           { 
                               ToVector4(rect.BottomLeft),  ToVector4(color),
                               ToVector4(rect.TopLeft),     ToVector4(color),
@@ -103,21 +173,21 @@ namespace SharpDXTests
 
             // Instantiate Vertex buiffer from vertex data
             // Буфер с описанием вершин ХАРДКОР
-            var vertices = SharpDX.Direct3D11.Buffer.Create(device, BindFlags.VertexBuffer, result);
+            _vertices = SharpDX.Direct3D11.Buffer.Create(_device, BindFlags.VertexBuffer, _result);
 
             // Create Constant Buffer
             // буфер констант. Используется для передачи данных между оперативной памятью и памятью видеокарты
-            var contantBuffer = new SharpDX.Direct3D11.Buffer(device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
+            _constantBuffer = new SharpDX.Direct3D11.Buffer(_device, Utilities.SizeOf<Matrix>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
 
             // Create Depth Buffer & View
             // Буфер глубины он же Z буфер
-            var depthBuffer = new Texture2D(device, new Texture2DDescription
+            var depthBuffer = new Texture2D(_device, new Texture2DDescription
             {
                 Format = Format.D32_Float_S8X24_UInt,
                 ArraySize = 1,
                 MipLevels = 1,
-                Width = form.ClientSize.Width,
-                Height = form.ClientSize.Height,
+                Width = _form.ClientSize.Width,
+                Height = _form.ClientSize.Height,
                 SampleDescription = new SampleDescription(1, 0),
                 Usage = ResourceUsage.Default,
                 BindFlags = BindFlags.DepthStencil,
@@ -125,32 +195,34 @@ namespace SharpDXTests
                 OptionFlags = ResourceOptionFlags.None
             });
 
-            var depthView = new DepthStencilView(device, depthBuffer);
+            _depthView = new DepthStencilView(_device, depthBuffer);
 
             // Prepare All the stages
             // Вот тут устанавливаются параметры конвеера, от начальной фазы до конечной
-            context.InputAssembler.InputLayout = layout;
+            _context.InputAssembler.InputLayout = _layout;
             // Веселая функция, определяет какие примитивы будут отрисованы (триугольники ил линии, иль еще чего нибудь)
-            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertices, Utilities.SizeOf<Vector4>() * 2, 0));
-            context.VertexShader.SetConstantBuffer(0, contantBuffer);
-            context.VertexShader.Set(vertexShader);
-            context.Rasterizer.SetViewports(new Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height, 0.0f, 1.0f));
-            context.PixelShader.Set(pixelShader);
+            _context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+            _context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(_vertices, Utilities.SizeOf<Vector4>() * 2, 0));
+            _context.VertexShader.SetConstantBuffer(0, _constantBuffer);
+            _context.VertexShader.Set(_vertexShader);
+            _context.Rasterizer.SetViewports(new Viewport(0, 0, _form.ClientSize.Width, _form.ClientSize.Height, 0.0f, 1.0f));
+            _context.PixelShader.Set(_pixelShader);
 
             // Треугольники должны быть видимы в обеих сторон
-            var rastStage = SharpDX.Direct3D11.RasterizerStateDescription.Default();
+            var rastStage = RasterizerStateDescription.Default();
             rastStage.CullMode = CullMode.None;
-            var rs = new RasterizerState(context.Device, rastStage);
-            context.Rasterizer.State = rs;
+            var rs = new RasterizerState(_context.Device, rastStage);
+            _context.Rasterizer.State = rs;
+        }
 
-            
+        public void Render()
+        {
             // Prepare matrices
             // Готовим матрицы
             // вида     : это вроде как камера
             // проекции : это описание того, как проектировать на экран
             var view = Matrix.LookAtLH(new Vector3(0.0f, 0.0f, -3f), new Vector3(0.2f, 0.2f, 0.2f), Vector3.UnitY);
-            var proj = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, form.ClientSize.Width / (float)form.ClientSize.Height, 0.1f, 100.0f);
+            var proj = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, _form.ClientSize.Width / (float)_form.ClientSize.Height, 0.1f, 100.0f);
             // умножая матрицы мы получим матрицу, которая содержит информацию и о камере и о том, как переносить точку из трехмерного пространства на двухмерное,
             // т.е. на экран пользователя
             var viewProj = Matrix.Multiply(view, proj);
@@ -158,20 +230,19 @@ namespace SharpDXTests
             // Use clock
             var clock = new Stopwatch();
             clock.Start();
-            var frameCount = 0;
-            var previousTime = TimeSpan.Zero;
-
+            
             // Main loop
-            RenderLoop.Run(form, () =>
+            RenderLoop.Run(_form, () =>
             {
+                OnStart();
                 var time = clock.ElapsedMilliseconds / 1000.0f;
 
                 // Clear views
                 // чистим от предидущих выводов
-                context.OutputMerger.SetTargets(depthView, renderView);
+                _context.OutputMerger.SetTargets(_depthView, _renderView);
 
-                context.ClearDepthStencilView(depthView, DepthStencilClearFlags.Depth, 1.0f, 0);
-                context.ClearRenderTargetView(renderView, SharpDX.Color.Black);
+                _context.ClearDepthStencilView(_depthView, DepthStencilClearFlags.Depth, 1.0f, 0);
+                _context.ClearRenderTargetView(_renderView, SharpDX.Color.Black);
 
                 // Update WorldViewProj Matrix
                 var worldViewProj =
@@ -185,77 +256,40 @@ namespace SharpDXTests
                 worldViewProj.Transpose();
 
                 // обновляем данные для шейдеров, а конкретнее матрицу, на которую надо умножить каждую вершину, чтобы повернуть наш куб
-                context.UpdateSubresource(ref worldViewProj, contantBuffer);
-
-                if (clock.Elapsed.Seconds != previousTime.Seconds)
-                {
-                    form.Text = string.Format("FPS: {0}, Planes: {1} Triangles: {2}", frameCount, sceneDescription.Planes.Count, result.Length / 6);
-                    frameCount = 0;
-                }
-
-                previousTime = clock.Elapsed;
-
-                frameCount++;
-
+                _context.UpdateSubresource(ref worldViewProj, _constantBuffer);
+                
+                OnFinish();
+                
                 // Draw the cube
                 // отрисовать куб!
-                context.Draw(result.Length, 0);
+                _context.Draw(_result.Length, 0);
 
                 // Present!
                 // континиус!
-                swapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
+                _swapChain.Present(0, PresentFlags.None);
             });
-
-            // Release all resources
-            vertexShaderByteCode.Dispose();
-            vertexShader.Dispose();
-            pixelShaderByteCode.Dispose();
-            pixelShader.Dispose();
-            vertices.Dispose();
-            layout.Dispose();
-            renderView.Dispose();
-            backBuffer.Dispose();
-            context.ClearState();
-            context.Flush();
-            device.Dispose();
-            context.Dispose();
-            swapChain.Dispose();
-            factory.Dispose();
         }
 
+        #endregion
 
-        static Vector4 ToVector4(Point point) { return new Vector4(point.X, point.Y, point.Z, 1f); }
+        #region INotifier
 
-        static Vector4 ToVector4(TestFramework.Color color) { return new Vector4(color.Red, color.Green, color.Blue, 1f); }
+        public event EventHandler Finish;
 
-        static Vector4[] GetAllPlane(string fileName)
+        protected virtual void OnFinish()
         {
-            return XDocument.Load(fileName).Descendants("Plane").SelectMany(planeTag => GetPlane(planeTag)).ToArray();
+            EventHandler handler = Finish;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        static Vector4[] GetFirstPlane(string fileName)
+        public event EventHandler Start;
+        
+        protected virtual void OnStart()
         {
-            return GetPlane(XDocument.Load(fileName).Descendants("Plane").First());
+            EventHandler handler = Start;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        private static Vector4[] GetPlane(XElement planeTag)
-        {
-            var cs = from color in planeTag.Element("Colors").Elements()
-                     select new
-                     {
-                         R = float.Parse(color.Element("Red").Value, CultureInfo.InvariantCulture),
-                         G = float.Parse(color.Element("Green").Value, CultureInfo.InvariantCulture),
-                         B = float.Parse(color.Element("Blue").Value, CultureInfo.InvariantCulture)
-                     };
-            var ps = from vertice in planeTag.Element("Vertices").Elements()
-                     select new
-                     {
-                         X = float.Parse(vertice.Element("X").Value, CultureInfo.InvariantCulture),
-                         Y = float.Parse(vertice.Element("Y").Value, CultureInfo.InvariantCulture),
-                         Z = float.Parse(vertice.Element("Z").Value, CultureInfo.InvariantCulture)
-                     };
-
-            return cs.Zip(ps, (c, p) => new[] { new Vector4(p.X, p.Y, p.Z, 1f), new Vector4(c.R, c.G, c.B, 1f) }).SelectMany(e => e).ToArray();
-        }
+        #endregion
     }
 }

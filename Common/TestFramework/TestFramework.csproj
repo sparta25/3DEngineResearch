@@ -90,6 +90,7 @@
     <Compile Include="ConvexSettings.cs" />
     <Compile Include="ConvexSettingsEx.cs" />
     <Compile Include="IConvexSettings.cs" />
+    <Compile Include="INotifier.cs" />
     <Compile Include="IStatistics.cs" />
     <Compile Include="ITestable.cs" />
     <Compile Include="Logger.cs" />
